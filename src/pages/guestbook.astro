@@ -1,19 +1,78 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-const pageTitle = "Guestbook";
+const pageTitle = "방명록";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
     <div class="comments-container">
-        <p>
-            Closed for the moment. Please patiently wait ♡
-        </p>
+        <h3>내 방명록임</h3>
+        <p>언젠가 이쁘게 만들겟음</p>
+        <p>도토리 나눠주실 분 구해요~~ </p>
+        <div class="submit-message" hidden>cool thanks</div>
+        <form
+            id="guestbookForm"
+            method="POST"
+            action="https://docs.google.com/forms/u/1/d/e/1FAIpQLSdYc22qVyxtR4u_DSHQ-NrikvFlR15Mfw4dD_omT9Znjtlu7Q/formResponse"
+            target="hidden_iframe"
+            class="form-body"
+            onsubmit="
+            document.querySelector('.submit-message').removeAttribute('hidden');
+            "
+            autocomplete="off"
+        >
+            <input
+                type="hidden"
+                name="id"
+                value="1FAIpQLSdYc22qVyxtR4u_DSHQ-NrikvFlR15Mfw4dD_omT9Znjtlu7Q"
+            />
+            <input type="hidden" name="pageHistory" value="0" />
+
+            <div class="form-group">
+                <label for="name">
+                    Name <span>*</span>
+                </label>
+                <div>
+                    <input
+                        type="text"
+                        name="entry.1293262249"
+                        id="name"
+                        required
+                        class="form-control"
+                    />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="message">
+                    Message <span>*</span>
+                </label>
+                <div>
+                    <textarea
+                        name="entry.800299434"
+                        id="message"
+                        rows="4"
+                        required
+                        class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="submit-button"> Submit </button>
+            </div>
+        </form>
+
+        <div class="guestbook-entries">
+            <h3>Entries</h3>
+            <iframe
+                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTJ6Vy7TrBxi5TYRRbmmBvtZ--XyijwQ_Q59DZd8vwveuNV4tkXMF-A6vYR-8a7mL_yFwewDGlXzhuG/pubhtml?gid=1723538406&single=true&widget=true&headers=false&chrome=false"
+            ></iframe>
+        </div>
     </div>
 </BaseLayout>
 <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 <style>
     .guestbook-entries iframe {
         width: 100%;
+        height: 400px;
     }
     .comments-container {
         position: relative;
@@ -41,6 +100,19 @@ const pageTitle = "Guestbook";
         animation: border-animation 2s linear infinite;
         z-index: 1;
     }
+
+    button {
+        background-color: #ff7bff9b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 6px;
+        cursor: pointer;
+        border-radius: 4px;}
 
     @keyframes border-animation {
         0% {
