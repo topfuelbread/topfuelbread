@@ -10,4 +10,15 @@ const blog = defineCollection({
     tags: z.array(z.string()),
   })
 });
-export const collections = { blog };
+
+const here = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: "./src/here" }),
+  schema: z.object({
+    title: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    tags: z.array(z.string()),
+  })
+});
+
+export const collections = { blog, here };

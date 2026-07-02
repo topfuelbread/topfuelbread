@@ -2,8 +2,8 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const pageTitle = "Blog";
-const posts = (await getCollection("blog")).sort(
+const pageTitle = "procreation";
+const posts = (await getCollection("here")).sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
@@ -15,7 +15,7 @@ const posts = (await getCollection("blog")).sort(
             {
                 posts.map((post: any) => (
                     <li>
-                        <a href={`/blog/${post.id}/`}>
+                        <a href={`/here/${post.id}/`}>
                         <div class="pub-date">{post.data.pubDate.toISOString().split("T")[0]}</div>
                         
                         {post.data.title}</a>
