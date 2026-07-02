@@ -1,0 +1,56 @@
+---
+
+---
+
+<nav>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/blog/">Blog</a>
+        <a href="/guestbook/">Guestbook</a>
+
+        <!-- <a href="/tags/">Tags</a> -->
+    </div>
+
+    <style>
+        .nav-links {
+            width: 100%;
+            background-color: #ffbcf5d8;
+            display: flex;
+            margin: 0;
+            flex-flow: row nowrap;
+            justify-content: center;
+            border-radius: 8px;
+            color: rgb(0, 0, 0);
+            font-size: 10px;
+        }
+
+        .nav-links a {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 2px rgba(241, 83, 255, 0.651);
+        }
+
+        .nav-links a:visited {
+            color: inherit;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus {
+            background-color: #ff98f1;
+            color: rgb(59, 29, 49);
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .nav-links {
+                justify-content: center;
+                display: block;
+            }
+        }
+    </style>
+</nav>

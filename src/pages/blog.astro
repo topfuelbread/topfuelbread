@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const pageTitle = "Blog";
+const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<BaseLayout pageTitle={pageTitle}>
+    <div class="content-wrapper">
+        <h3>Posts</h3>
+        <ul>
+            {
+                posts.map((post: any) => (
+                    <li>
+                        <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</BaseLayout>
+
+<style>
+    .content-wrapper {
+        border: dotted 2px #79ffcc;
+        background-color: #cbfff631;
+        line-height: 2;
+        text-align: center;
+        flex: auto;
+    }
+
+    ul {
+        width: fit-content;
+        border: solid 2px #79ffcc;
+        margin: 0 auto;
+        padding: 10px;
+        background-color: #63ffc33a;
+    }
+
+    li {
+        color: rgb(0, 0, 0);
+    }
+
+    a {
+        color: #ffe0f3;
+        text-decoration: none;
+        text-shadow: 1px 1px 2px rgba(255, 0, 155, 0.651);
+        font-weight: 600;
+    }
+
+    a :visited {
+        color: inherit;
+    }
+</style>

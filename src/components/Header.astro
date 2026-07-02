@@ -1,0 +1,44 @@
+---
+import Navigation from "./Navigation.astro";
+import rickroll8bit from "../static/rickroll8bit.mp3";
+---
+
+<header>
+    <div class="top-bar" transition:persist>
+        <audio controls class="bgm">
+            <source src={rickroll8bit} type="audio/mpeg" />
+        </audio>
+    </div>
+
+
+    <div class="blinking" style="padding-bottom: 15px;">
+        <div class="glow title">Welcome to My World!</div>
+    </div>
+
+    <nav>
+        <Navigation />
+    </nav>
+
+</header>
+
+<style>
+    .top-bar {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+    .bgm {
+        padding: 0px 15px;
+    }
+    .title {
+        font-size: 50px;
+        padding: 50px 0px;
+        font-weight:600;
+    }
+
+    header {
+        width: 100%;
+    }
+
+</style>
