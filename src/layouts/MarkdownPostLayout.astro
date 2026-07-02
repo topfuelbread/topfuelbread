@@ -6,7 +6,9 @@ const { frontmatter } = Astro.props;
 
 <BaseLayout pageTitle={frontmatter.title}>
     <div class="content-wrapper">
-        <div class="date">Published on {frontmatter.pubDate.toLocaleDateString()}</div>
+        <div class="date">
+            Published on {frontmatter.pubDate.toISOString().split("T")[0]}
+        </div>
         <div class="tags">
             {
                 frontmatter.tags.map((tag: string) => (
@@ -17,8 +19,10 @@ const { frontmatter } = Astro.props;
             }
             <p class="tag">tags:</p>
         </div>
-        <div class="post-content">
-            <slot />
+        <div class="post-container">
+            <div class="post-content">
+                <slot />
+            </div>
         </div>
     </div>
 
@@ -56,6 +60,14 @@ const { frontmatter } = Astro.props;
         padding: 2px 5px;
         font-weight: 100;
         font-size: 13px;
+    }
+
+    .post-container {
+        border: dotted 2px #79ffcc;
+        background-color: #cbfff631;
+        line-height: 2;
+        text-align: center;
+        flex: auto;
     }
 
     .post-content {

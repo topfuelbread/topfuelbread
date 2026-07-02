@@ -15,7 +15,10 @@ const posts = (await getCollection("blog")).sort(
             {
                 posts.map((post: any) => (
                     <li>
-                        <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                        <a href={`/blog/${post.id}/`}>
+                        <div class=pub-date>{post.data.pubDate.toISOString().split('T')[0]}</div>
+                        
+                        {post.data.title}</a>
                     </li>
                 ))
             }
@@ -33,15 +36,19 @@ const posts = (await getCollection("blog")).sort(
     }
 
     ul {
-        width: fit-content;
+        width: 40vw;
         border: solid 2px #79ffcc;
         margin: 0 auto;
         padding: 10px;
         background-color: #63ffc33a;
+        bullet-style-type: none;
     }
 
     li {
         color: rgb(0, 0, 0);
+        border-bottom: dotted 5px #70aeff;
+        padding: 5px;
+        list-style-type: none;
     }
 
     a {
@@ -53,5 +60,11 @@ const posts = (await getCollection("blog")).sort(
 
     a :visited {
         color: inherit;
+    }
+
+    .pub-date {
+        font-size: 12px;
+        color: rgb(255, 255, 255);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.651);
     }
 </style>
