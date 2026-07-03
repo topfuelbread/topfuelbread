@@ -1,0 +1,16 @@
+---
+import VisualNovelScene from "../../components/shin/VisualNovelScene.astro";
+import ShinGameLayout from "../../layouts/ShinGameLayout.astro";
+import { getScene, scenes } from "../../lib/shin/scenes";
+
+export function getStaticPaths() {
+  return Object.keys(scenes).map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const scene = getScene(slug!);
+---
+
+<ShinGameLayout pageTitle={scene.title}>
+  <VisualNovelScene scene={scene} />
+</ShinGameLayout>

@@ -1,0 +1,46 @@
+---
+import { FLAG_IDS } from "../../lib/shin/flags";
+---
+
+<div class="vn-flag-meter" data-flag-meter>
+  {
+    FLAG_IDS.map((id) => (
+      <div class="vn-flag-item" data-flag={id}>
+        <span class="vn-flag-label">{id}</span>
+        <div class="vn-flag-bar">
+          <div class="vn-flag-fill" data-flag-fill />
+        </div>
+        <span class="vn-flag-value" data-flag-value>0</span>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  import { FLAG_IDS, getFlags } from "../../lib/shin/flags";
+
+  function updateFlagMeter() {
+    const flags = getFlags();
+    const meter = document.querySelector("[data-flag-meter]");
+    if (!meter) return;
+
+    for (const id of FLAG_IDS) {
+      const item = meter.querySelector(`[data-flag="${id}"]`);
+      if (!item) continue;
+
+      const value = flags[id] ?? 0;
+      const fill = item.querySelector("[data-flag-fill]");
+      const valueEl = item.querySelector("[data-flag-value]");
+
+      if (fill instanceof HTMLElement) {
+        fill.style.width = `${Math.min(100, Math.max(0, value))}%`;
+      }
+      if (valueEl) {
+        valueEl.textContent = String(value);
+      }
+    }
+  }
+
+  updateFlagMeter();
+  document.addEventListener("astro:page-load", updateFlagMeter);
+</script>
