@@ -1,14 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
+import AsciiContainer from "../content/ascii/AsciiContainer.astro";
 const pageTitle = " Welcome!";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <div class="top">
     <h2>
-      안녕하세요 파란새에게 유령밴을 당한 
-      코가 길어 슬픈 개미핥기의 갠홈에
+      안녕하세요 파란새에게 유령밴을 당한 코가 길어 슬픈 개미핥기의 갠홈에
       어서오세요...
     </h2>
     <img
@@ -17,6 +16,8 @@ const pageTitle = " Welcome!";
   </div>
 
   <div class="">
+    <AsciiContainer name="miyuki" />
+
     <div class="message-box">
       <h3>2026/07/02</h3>
       <h4>
@@ -40,10 +41,9 @@ const pageTitle = " Welcome!";
       <h4>이 밑에 있는 내용들은 전 갠홈에서 복붙해온 것들입니다.</h4>
     </div>
 
-    *** *** *** *** *** *** *** *** *** *** *** ***
-    *** *** *** *** *** *** *** *** *** *** *** ***
-    *** *** *** *** *** *** *** *** *** *** *** ***
-    *** *** *** *** *** *** *** *** *** *** *** ***
+    *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+    *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+    *** *** *** *** *** *** *** *** *** ***
 
     <h4>2025/09/25 Updates</h4>
   </div>

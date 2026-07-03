@@ -1,0 +1,94 @@
+---
+interface Props {
+  /** Filename without extension from src/content/ascii/art/ */
+  name: string;
+}
+
+const { name } = Astro.props;
+
+const artModules = import.meta.glob<string>("./art/*.html", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+
+const artPath = `./art/${name}.html`;
+const asciiHtml = artModules[artPath];
+
+if (!asciiHtml) {
+  const available = Object.keys(artModules)
+    .map((path) => path.replace("./art/", "").replace(".html", ""))
+    .join(", ");
+
+  throw new Error(
+    `ASCII art "${name}" not found. Add src/content/ascii/art/${name}.html` +
+      (available ? ` (available: ${available})` : ""),
+  );
+}
+---
+
+<div class="ascii-panel">
+  <div class="ascii-viewport" set:html={asciiHtml} />
+</div>
+
+<style>
+  .ascii-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    border: 2px solid #1a1a1a;
+    border-radius: 12px;
+    background: #000;
+    overflow: hidden;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .ascii-viewport {
+    overflow: auto;
+    max-width: 100%;
+    padding: 12px 14px;
+    background: #000;
+  }
+
+  /* coddy.tech HTML export: one colored span per character, one row per line */
+  .ascii-viewport :global(code) {
+    display: block;
+    width: max-content;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-wrap: normal;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.15;
+    font-variant-ligatures: none;
+    font-feature-settings:
+      "liga" 0,
+      "calt" 0;
+    letter-spacing: 0;
+    tab-size: 4;
+    -moz-tab-size: 4;
+  }
+</style>
+
+<script>
+  function centerAsciiViewport(viewport) {
+    const overflow = viewport.scrollWidth - viewport.clientWidth;
+    if (overflow > 0) {
+      viewport.scrollLeft = overflow / 2;
+    }
+  }
+
+  function centerAsciiViewports() {
+    document.querySelectorAll(".ascii-viewport").forEach(centerAsciiViewport);
+  }
+
+  centerAsciiViewports();
+  document.addEventListener("astro:page-load", centerAsciiViewports);
+</script>
