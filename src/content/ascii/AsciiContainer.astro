@@ -90,7 +90,7 @@ if (!asciiHtml) {
 </style>
 
 <script>
-  function centerAsciiViewport(viewport) {
+  function centerAsciiViewport(viewport: Element) {
     const overflow = viewport.scrollWidth - viewport.clientWidth;
     if (overflow > 0) {
       viewport.scrollLeft = overflow / 2;
