@@ -11,14 +11,4 @@ const blog = defineCollection({
   }),
 });
 
-const here = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/here" }),
-  schema: z.object({
-    title: z.string(),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    tags: z.array(z.string()),
-  }),
-});
-
-export const collections = { blog, here };
+export const collections = { blog };
