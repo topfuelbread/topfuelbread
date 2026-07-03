@@ -31,8 +31,9 @@ const { frontmatter } = Astro.props;
 
 <style>
     a {
-        color: #ff7bff9b;
         text-decoration: none;
+        color: black;
+        font-weight: 200;
     }
 
     .content-wrapper {
@@ -56,10 +57,10 @@ const { frontmatter } = Astro.props;
 
     .tag {
         border: dotted 1px #a1a1a1;
-        font-size: 1.15em;
         padding: 2px 5px;
-        font-weight: 100;
         font-size: 13px;
+        background: rgb(237, 167, 255);
+        color: #0000009b;
     }
 
     .post-container {
@@ -68,6 +69,7 @@ const { frontmatter } = Astro.props;
         line-height: 2;
         text-align: center;
         flex: auto;
+        font-family: monospace;
     }
 
     .post-content {
