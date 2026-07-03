@@ -3,69 +3,69 @@
 ---
 
 <div class="comments-container">
-    <div class="giscus"></div>
+  <div class="giscus"></div>
 </div>
 
 <script
-    src="https://giscus.app/client.js"
-    data-repo="topfuelbread/topfuelbread-comments"
-    data-repo-id="R_kgDOPrqI8w"
-    data-category="General"
-    data-category-id="DIC_kwDOPrqI884CvHfe"
-    data-mapping="pathname"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="top"
-    data-theme="purple"
-    data-lang="en"
-    data-loading="lazy"
-    crossorigin="anonymous"
-    async></script>
+  src="https://giscus.app/client.js"
+  data-repo="topfuelbread/topfuelbread-comments"
+  data-repo-id="R_kgDOPrqI8w"
+  data-category="General"
+  data-category-id="DIC_kwDOPrqI884CvHfe"
+  data-mapping="pathname"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="top"
+  data-theme="purple"
+  data-lang="en"
+  data-loading="lazy"
+  crossorigin="anonymous"
+  async></script>
 
 <style>
-    .comments-container {
-        position: relative;
-        background-color: purple;
-        padding: 10px;
-        margin: 30px 0px;
-        border: 2px dashed pink;
-        overflow: hidden;
-    }
+  .comments-container {
+    position: relative;
+    background-color: purple;
+    padding: 10px;
+    margin: 30px 0px;
+    border: 2px dashed pink;
+    overflow: hidden;
+  }
 
-    /* Animated border using pseudo-element */
-    .comments-container::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        border: 3px solid hotpink;
-        box-shadow:
-            10px hotpink,
-            0 0 20px deeppink,
-            0 0 30px pink;
-        animation: border-animation 2s linear infinite;
-        z-index: 1;
-    }
+  /* Animated border using pseudo-element */
+  .comments-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border: 3px solid hotpink;
+    box-shadow:
+      10px hotpink,
+      0 0 20px deeppink,
+      0 0 30px pink;
+    animation: border-animation 2s linear infinite;
+    z-index: 1;
+  }
 
-    @keyframes border-animation {
-        0% {
-            clip-path: inset(0 100% 100% 0);
-        }
-        /* 25% {
+  @keyframes border-animation {
+    0% {
+      clip-path: inset(0 100% 100% 0);
+    }
+    /* 25% {
             clip-path: inset(0 0 100% 0);
         } */
-        50% {
-            clip-path: inset(0 0 0 0);
-        }
-        75% {
-            clip-path: inset(100% 0 0 0);
-        }
-        100% {
-            clip-path: inset(100% 100% 0 0);
-        }
+    50% {
+      clip-path: inset(0 0 0 0);
     }
+    75% {
+      clip-path: inset(100% 0 0 0);
+    }
+    100% {
+      clip-path: inset(100% 100% 0 0);
+    }
+  }
 </style>

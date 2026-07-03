@@ -3,96 +3,95 @@ import TodoList from "./TodoList.astro";
 ---
 
 <div class="sidebar flex-col">
-    <center>
-        <div class="divider">************</div>
-    </center>
-    <div class="about-me">
-        <h3>* About Me *</h3>
-        <ul>
-            <li><b>장래희망:</b> 익룡</li>
-            <li><b>최애음식:</b> 국</li>
-            <li><b>종교:</b> CEO Mindset</li>
-            <li><b>싫어하는 것:</b>too many legs</li>
-            <li><b>song:</b> ♪Free Bird by Lynyrd Skynrd♪</li>
-            <li>
-                <b>취미:</b> mindlessly surfing the internet for a quick dopamine
-                boost and gathering useless information that takes up too much space
-                in my brain and comtemplate about the meaning of life and our existance
-                until I feel empty again
-            </li>
-            <li><b>최애음식2:</b> 크림빵</li>
-        </ul>
-    </div>
-    <div class="logos">
-        <a href="/rss.xml"
-            ><i class="fa-solid fa-square-rss"></i></a
-        >
-        <a href="https://store.steampowered.com/app/3252360/Unemployment_Simulator_2018/"
-            ><i class="fa-brands fa-linkedin"></i></a
-        >
-        <a href="https://store.steampowered.com/app/1443200/Class_of_09/"
-            ><i class="fa-brands fa-square-instagram"></i></a
-        >
-    </div>
+  <center>
+    <div class="divider">************</div>
+  </center>
+  <div class="about-me">
+    <h3>* About Me *</h3>
+    <ul>
+      <li><b>장래희망:</b> 익룡</li>
+      <li><b>최애음식:</b> 국</li>
+      <li><b>종교:</b> CEO Mindset</li>
+      <li><b>싫어하는 것:</b>too many legs</li>
+      <li><b>song:</b> ♪Free Bird by Lynyrd Skynrd♪</li>
+      <li>
+        <b>취미:</b> mindlessly surfing the internet for a quick dopamine boost and
+        gathering useless information that takes up too much space in my brain and
+        comtemplate about the meaning of life and our existance until I feel empty
+        again
+      </li>
+      <li><b>최애음식2:</b> 크림빵</li>
+    </ul>
+  </div>
+  <div class="logos">
+    <a href="/rss.xml"><i class="fa-solid fa-square-rss"></i></a>
+    <a
+      href="https://store.steampowered.com/app/3252360/Unemployment_Simulator_2018/"
+      ><i class="fa-brands fa-linkedin"></i></a
+    >
+    <a href="https://store.steampowered.com/app/1443200/Class_of_09/"
+      ><i class="fa-brands fa-square-instagram"></i></a
+    >
+  </div>
 
-    <TodoList />
+  <TodoList />
 
-    <style>
-        .sidebar {
-            background-color: #ffe4e8;
-        }
+  <style>
+    .sidebar {
+      background-color: #ffe4e8;
+    }
 
-        .logos {
-            text-align: center;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            border: pink 3px dotted;
-            padding: 5px;
-            margin-top: 10px;
-        }
+    .logos {
+      text-align: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border: pink 3px dotted;
+      padding: 5px;
+      margin-top: 10px;
+    }
 
-        ul {
-            list-style-type: circle;
-            padding-inline-start: 20px;
-            text-align: left;
-        }
+    ul {
+      list-style-type: circle;
+      padding-inline-start: 20px;
+      text-align: left;
+    }
 
-        .profile-pic {
-            border: pink 4px dotted;
-        }
+    .profile-pic {
+      border: pink 4px dotted;
+    }
 
-        .divider {
-            padding: 10px 0px;
-            color: rgb(255, 112, 255);
-        }
+    .divider {
+      padding: 10px 0px;
+      color: rgb(255, 112, 255);
+    }
 
-        .about-me {
-            text-align: center;
-            color: cadetblue;
-            text-shadow: pink 0 1px;
-            border: pink 5px dotted;
-            font-size: 13px;
-            font-weight: 200;
-            line-height: 1.4;
+    .about-me {
+      text-align: center;
+      color: cadetblue;
+      text-shadow: pink 0 1px;
+      border: pink 5px dotted;
+      font-size: 13px;
+      font-weight: 200;
+      line-height: 1.4;
 
-            padding-bottom: 10px;
-        }
+      padding-bottom: 10px;
+    }
 
-        .about-me li {
-            margin-bottom: 2px;
-        }
+    .about-me li {
+      margin-bottom: 2px;
+    }
 
-        .about-me b {
-            font-weight: 800;
-        }
+    .about-me b {
+      font-weight: 800;
+    }
 
-        .sidebar {
-            padding-top: 20px;
-        }
+    .sidebar {
+      padding-top: 20px;
+    }
 
-        .logos a {
-            color: tomato;
-            font-size: 20px;
-        }
-    </style>
+    .logos a {
+      color: tomato;
+      font-size: 20px;
+    }
+  </style>
 </div>

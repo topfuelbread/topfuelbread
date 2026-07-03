@@ -2,23 +2,23 @@ import { glob } from "astro/loaders";
 import { z, defineCollection } from "astro:content";
 
 const blog = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/blog" }),
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/blog" }),
   schema: z.object({
     title: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()),
-  })
+  }),
 });
 
 const here = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/here" }),
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/here" }),
   schema: z.object({
     title: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()),
-  })
+  }),
 });
 
 export const collections = { blog, here };

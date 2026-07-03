@@ -14,50 +14,50 @@ const { pageTitle } = Astro.props;
 ---
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <script
-            src="https://kit.fontawesome.com/8f35e4c463.js"
-            crossorigin="anonymous"></script>
-        <!-- mouse cursor  https://github.com/tholman/cursor-effects -->
-        <script type="module">
-            import { fairyDustCursor } from "https://unpkg.com/cursor-effects@latest/dist/esm.js";
-            new fairyDustCursor();
-        </script>
-        <link
-            rel="alternate"
-            type="application/rss+xml"
-            title="topfuelbread.com RSS"
-            href={new URL("rss.xml", Astro.site)}
-        />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <script
+      src="https://kit.fontawesome.com/8f35e4c463.js"
+      crossorigin="anonymous"></script>
+    <!-- mouse cursor  https://github.com/tholman/cursor-effects -->
+    <script type="module">
+      import { fairyDustCursor } from "https://unpkg.com/cursor-effects@latest/dist/esm.js";
+      new fairyDustCursor();
+    </script>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="topfuelbread.com RSS"
+      href={new URL("rss.xml", Astro.site)}
+    />
 
-        <ClientRouter />
+    <ClientRouter />
 
-        <title>topfuelbread:: {pageTitle}</title>
-    </head>
-    <!-- <body transition:persist> remove if buggy -->
-    <body transition:persist>
-        <div class="grid-container">
-            <div class="grid-item layout-top">
-                <Header transition:persist />
-            </div>
-            <div class="grid-item layout-content" transition:animate="fade">
-                <div class="flex-col">
-                    <PageTitle pageTitle={pageTitle} />
-                    <slot />
-                </div>
-            </div>
-            <div class="grid-item layout-leftbar">
-                <LeftSideBar transition:persist />
-            </div>
-            <div class="grid-item layout-rightbar">
-                <RightSideBar transition:persist />
-            </div>
-            <div class="grid-item layout-bottom"><Footer /></div>
+    <title>topfuelbread:: {pageTitle}</title>
+  </head>
+  <!-- <body transition:persist> remove if buggy -->
+  <body transition:persist>
+    <div class="grid-container">
+      <div class="grid-item layout-top">
+        <Header transition:persist />
+      </div>
+      <div class="grid-item layout-content" transition:animate="fade">
+        <div class="flex-col">
+          <PageTitle pageTitle={pageTitle} />
+          <slot />
         </div>
-    </body>
+      </div>
+      <div class="grid-item layout-leftbar">
+        <LeftSideBar transition:persist />
+      </div>
+      <div class="grid-item layout-rightbar">
+        <RightSideBar transition:persist />
+      </div>
+      <div class="grid-item layout-bottom"><Footer /></div>
+    </div>
+  </body>
 </html>
 
 <style></style>

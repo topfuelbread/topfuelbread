@@ -1,42 +1,47 @@
 ---
 import Changelog from "./Changelog.astro";
-
 ---
 
 <div class="sidebar flex-col">
-    <Changelog />
+  <Changelog />
 
-    <div>Please feed my hamster for me...</div>
-    <div>↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓</div>
-    <div class="ham-wrapper">
-        <iframe
-            class="ham"
-            width="314"
-            height="350"
-            src="https://gifypet.neocities.org/pet/pet.html?name=Ham&dob=1757183860&gender=b&element=Water&pet=hamster.gif&map=ozwomp.jpg&background=gify.jpg&tablecolor=black&textcolor=black"
-        >
-        </iframe>
-    </div>
-    <div>BEWARE! A new instance of Ham will be created every time you open a new page. Don't kill him pls.</div>
-    <div>ps. he's invisible on mobile devices. then he never existed from beginning, so you shouldn't worry.</div>
+  <div>Please feed my hamster for me...</div>
+  <div>↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓</div>
+  <div class="ham-wrapper">
+    <iframe
+      class="ham"
+      width="314"
+      height="350"
+      src="https://gifypet.neocities.org/pet/pet.html?name=Ham&dob=1757183860&gender=b&element=Water&pet=hamster.gif&map=ozwomp.jpg&background=gify.jpg&tablecolor=black&textcolor=black"
+    >
+    </iframe>
+  </div>
+  <div>
+    BEWARE! A new instance of Ham will be created every time you open a new
+    page. Don't kill him pls.
+  </div>
+  <div>
+    ps. he's invisible on mobile devices. then he never existed from beginning,
+    so you shouldn't worry.
+  </div>
 </div>
 
 <style>
-    .sidebar {
-        padding-top: 20px;
-        text-align: start;
-    }
+  .sidebar {
+    padding-top: 20px;
+    text-align: start;
+  }
 
-    .ham-wrapper {
-        padding-top: 20px;
-        padding-bottom: 20px;
-        height: 400px;
-    }
+  .ham-wrapper {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 400px;
+  }
 
-    .ham {
-        /* position: absolute; */
-        position: fixed;
+  .ham {
+    /* position: absolute; */
+    position: fixed;
 
-        overflow: hidden;
-    }
+    overflow: hidden;
+  }
 </style>

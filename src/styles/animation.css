@@ -1,79 +1,80 @@
 @keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
 
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .rotating {
-    animation: rotate 1s infinite;
+  animation: rotate 1s infinite;
 }
 
 @keyframes blink {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    50% {
-        opacity: 1;
-    }
+  50% {
+    opacity: 1;
+  }
 
-    100% {
-        opacity: 0;
-    }
+  100% {
+    opacity: 0;
+  }
 }
 
 .blinking {
-    animation-name: blink;
-    animation-duration: 3s;
-    animation-iteration-count: infinite;
+  animation-name: blink;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
 }
 
 .glow {
-    color: #fff;
-    text-align: center;
-    -webkit-animation: glow 1s ease-in-out infinite alternate;
-    -moz-animation: glow 1s ease-in-out infinite alternate;
-    animation: glow 1s ease-in-out infinite alternate;
+  color: #fff;
+  text-align: center;
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
 }
 
 @-webkit-keyframes glow {
-    from {
-        text-shadow:
-            0 0 10px #fff,
-            0 0 20px #fff,
-            0 0 30px #e60073,
-            0 0 40px #e60073,
-            0 0 50px #e60073,
-            0 0 60px #e60073,
-            0 0 70px #e60073;
-    }
+  from {
+    text-shadow:
+      0 0 10px #fff,
+      0 0 20px #fff,
+      0 0 30px #e60073,
+      0 0 40px #e60073,
+      0 0 50px #e60073,
+      0 0 60px #e60073,
+      0 0 70px #e60073;
+  }
 
-    to {
-        text-shadow:
-            0 0 20px #fff,
-            0 0 30px #ff4da6,
-            0 0 40px #ff4da6,
-            0 0 50px #ff4da6,
-            0 0 60px #ff4da6,
-            0 0 70px #ff4da6,
-            0 0 80px #ff4da6;
-    }
+  to {
+    text-shadow:
+      0 0 20px #fff,
+      0 0 30px #ff4da6,
+      0 0 40px #ff4da6,
+      0 0 50px #ff4da6,
+      0 0 60px #ff4da6,
+      0 0 70px #ff4da6,
+      0 0 80px #ff4da6;
+  }
 }
 
 .shimmer {
-    color: grey;
-    display: inline-block;
-    -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
-    background-repeat: no-repeat;
-    animation: shimmer 2.5s infinite;
+  color: grey;
+  display: inline-block;
+  -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300%
+    100%;
+  background-repeat: no-repeat;
+  animation: shimmer 2.5s infinite;
 }
 
 @keyframes shimmer {
-    100% {
-        -webkit-mask-position: left
-    }
+  100% {
+    -webkit-mask-position: left;
+  }
 }

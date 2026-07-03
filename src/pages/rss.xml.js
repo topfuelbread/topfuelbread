@@ -1,11 +1,11 @@
-import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import rss from "@astrojs/rss";
+import { getCollection } from "astro:content";
 
 export async function GET(context) {
   const blog = await getCollection("blog");
   return rss({
-    title: 'topfuelbread.com',
-    description: 'this is where i do i things',
+    title: "topfuelbread.com",
+    description: "this is where i do i things",
     site: context.site,
     items: blog.map((post) => ({
       title: post.data.title,
@@ -13,7 +13,7 @@ export async function GET(context) {
       link: `/blog/${post.id}/`,
     })),
     customData: `<language>en-us</language>`,
-  })
+  });
 }
 
 // https://docs.astro.build/en/recipes/rss
