@@ -1,18 +1,20 @@
 ---
 interface Props {
-  /** Basename in src/content/ascii/art/ — loads {name}.html and optional {name}.css */
+  /** Path relative to src/content/ascii/art/ — loads {name}.html and optional {name}.css (e.g. miyuki, yytd/shin) */
   name: string;
 }
 
 const { name } = Astro.props;
 
-const artModules = import.meta.glob<string>("./art/*.html", {
+const artSlug = name.split("/").at(-1) ?? name;
+
+const artModules = import.meta.glob<string>("./art/**/*.html", {
   query: "?raw",
   import: "default",
   eager: true,
 });
 
-const styleModules = import.meta.glob<string>("./art/*.css", {
+const styleModules = import.meta.glob<string>("./art/**/*.css", {
   query: "?raw",
   import: "default",
   eager: true,
@@ -35,7 +37,7 @@ if (!asciiHtml) {
 }
 ---
 
-<div class="ascii-panel" data-art={name}>
+<div class="ascii-panel" data-art={artSlug}>
   <div class="ascii-viewport" set:html={asciiHtml} />
 </div>
 
