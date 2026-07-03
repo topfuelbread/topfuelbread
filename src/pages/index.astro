@@ -2,7 +2,7 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import AsciiContainer from "../content/ascii/AsciiContainer.astro";
-import OldIndex from "../components/content/old-index.astro";
+import OldIndex from "../content/old-index.astro";
 const pageTitle = " Welcome!";
 
 const latestPost = (await getCollection("blog")).sort(
