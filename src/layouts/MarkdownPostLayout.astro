@@ -1,12 +1,14 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import { formatBlogPubDate } from "../lib/pubDate";
+
 const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
   <div class="content-wrapper">
     <div class="date">
-      Published on {frontmatter.pubDate.toISOString().split("T")[0]}
+      Published on {formatBlogPubDate(frontmatter.pubDate, frontmatter.timezone)}
     </div>
     <div class="tags">
       {

@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 
-const dateLabel = entry.data.pubDate.toISOString().split("T")[0];
+const dateLabel = entry.data.pubDate.toISOString().slice(0, 19).split("T")[0];
 ---
 
 <BaseLayout pageTitle={`Diary ${dateLabel}`}>

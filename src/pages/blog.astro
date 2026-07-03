@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { formatBlogPubDate } from "../lib/pubDate";
 
 const pageTitle = "Blog";
 const posts = (await getCollection("blog")).sort(
@@ -17,7 +18,7 @@ const posts = (await getCollection("blog")).sort(
           <li>
             <a href={`/blog/${post.id}/`}>
               <div class="pub-date">
-                {post.data.pubDate.toISOString().split("T")[0]}
+                {formatBlogPubDate(post.data.pubDate, post.data.timezone)}
               </div>
 
               {post.data.title}

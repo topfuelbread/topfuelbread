@@ -8,6 +8,7 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()),
+    timezone: z.string().optional(),
   }),
 });
 
@@ -16,6 +17,7 @@ const diary = defineCollection({
   schema: z.object({
     pubDate: z.coerce.date(),
     asciiArt: z.string().optional(),
+    timezone: z.string().optional(),
   }),
 });
 

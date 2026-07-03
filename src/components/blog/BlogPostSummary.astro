@@ -1,6 +1,7 @@
 ---
 import { render } from "astro:content";
 import { getBlogPost } from "../../lib/blog";
+import { formatBlogPubDate } from "../../lib/pubDate";
 
 interface Props {
   /** Content collection id, e.g. `2026/07/03` */
@@ -15,13 +16,14 @@ if (!post) {
 }
 
 const { Content } = await render(post);
-const likelyTruncated = post.body.trim().length > 400;
+const SUMMARY_LIMIT = 300;
+const likelyTruncated = (post.body ?? "").trim().length > SUMMARY_LIMIT;
 ---
 
 <div class="blog-post-summary-container">
   <article class="blog-post-summary">
     <div class="pub-date">
-      {post.data.pubDate.toISOString().split("T")[0]}
+      {formatBlogPubDate(post.data.pubDate, post.data.timezone)}
     </div>
     <h3>
       <a href={`/blog/${post.id}/`}>{post.data.title}</a>
