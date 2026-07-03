@@ -1,0 +1,67 @@
+---
+import AsciiContainer from "../../content/ascii/AsciiContainer.astro";
+import type { FlagId, Scene } from "../../lib/vn/types";
+import FlagMeter from "./FlagMeter.astro";
+
+interface Props {
+  scene: Scene;
+  novelId: string;
+  flagIds: FlagId[];
+  showFlags?: boolean;
+}
+
+const { scene, novelId, flagIds, showFlags = true } = Astro.props;
+---
+
+<div class="vn-stage" data-novel-id={novelId}>
+  {showFlags && <FlagMeter novelId={novelId} flagIds={flagIds} />}
+  <AsciiContainer name={scene.asciiArt} />
+  <div class="vn-dialogue">
+    <div class="vn-speaker">{scene.speaker}</div>
+    <p class="vn-text">{scene.dialogue}</p>
+  </div>
+  <div class="vn-choices">
+    {
+      scene.choices.map((choice) => (
+        <a
+          class="vn-choice"
+          href={choice.href}
+          {...(choice.flags
+            ? { "data-flags": JSON.stringify(choice.flags) }
+            : {})}
+        >
+          {choice.label}
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import { applyFlags } from "../../lib/vn/flags";
+  import type { FlagState } from "../../lib/vn/types";
+
+  function bindChoiceFlags() {
+    document.querySelectorAll(".vn-stage[data-novel-id]").forEach((stage) => {
+      if (!(stage instanceof HTMLElement)) return;
+
+      const novelId = stage.dataset.novelId;
+      if (!novelId) return;
+
+      stage.querySelectorAll(".vn-choice[data-flags]").forEach((el) => {
+        if (!(el instanceof HTMLAnchorElement)) return;
+        if (el.dataset.bound) return;
+
+        el.dataset.bound = "true";
+        el.addEventListener("click", () => {
+          const raw = el.getAttribute("data-flags");
+          if (!raw) return;
+          applyFlags(novelId, JSON.parse(raw) as FlagState);
+        });
+      });
+    });
+  }
+
+  bindChoiceFlags();
+  document.addEventListener("astro:page-load", bindChoiceFlags);
+</script>

@@ -2,7 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 
 import "../styles/global.css";
-import "../styles/shin-vn.css";
+import "../styles/vn.css";
 
 const { pageTitle } = Astro.props;
 ---
@@ -15,10 +15,10 @@ const { pageTitle } = Astro.props;
     <ClientRouter />
     <title>topfuelbread:: {pageTitle}</title>
   </head>
-  <body class="shin-game-body">
-    <div class="shin-game-frame">
-      <a href="/" class="shin-game-back">← back to site</a>
-      <main class="shin-game-content" transition:animate="fade">
+  <body class="vn-game-body">
+    <div class="vn-game-frame">
+      <a href="/" class="vn-game-back">← back to site</a>
+      <main class="vn-game-content" transition:animate="fade">
         <slot />
       </main>
     </div>

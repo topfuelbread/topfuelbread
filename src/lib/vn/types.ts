@@ -1,4 +1,4 @@
-export type FlagId = "affection" | "trust";
+export type FlagId = string;
 
 export type SceneChoice = {
   label: string;
@@ -16,3 +16,10 @@ export type Scene = {
 };
 
 export type FlagState = Partial<Record<FlagId, number>>;
+
+export type NovelConfig = {
+  id: string;
+  name: string;
+  basePath: string;
+  flagIds: FlagId[];
+};

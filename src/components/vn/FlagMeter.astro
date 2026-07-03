@@ -1,10 +1,17 @@
 ---
-import { FLAG_IDS } from "../../lib/shin/flags";
+import type { FlagId } from "../../lib/vn/types";
+
+interface Props {
+  novelId: string;
+  flagIds: FlagId[];
+}
+
+const { novelId, flagIds } = Astro.props;
 ---
 
-<div class="vn-flag-meter" data-flag-meter>
+<div class="vn-flag-meter" data-flag-meter data-novel-id={novelId}>
   {
-    FLAG_IDS.map((id) => (
+    flagIds.map((id) => (
       <div class="vn-flag-item" data-flag={id}>
         <span class="vn-flag-label">{id}</span>
         <div class="vn-flag-bar">
@@ -17,16 +24,23 @@ import { FLAG_IDS } from "../../lib/shin/flags";
 </div>
 
 <script>
-  import { FLAG_IDS, getFlags } from "../../lib/shin/flags";
+  import { getFlags } from "../../lib/vn/flags";
 
   function updateFlagMeter() {
-    const flags = getFlags();
     const meter = document.querySelector("[data-flag-meter]");
-    if (!meter) return;
+    if (!meter || !(meter instanceof HTMLElement)) return;
 
-    for (const id of FLAG_IDS) {
-      const item = meter.querySelector(`[data-flag="${id}"]`);
-      if (!item) continue;
+    const novelId = meter.dataset.novelId;
+    if (!novelId) return;
+
+    const flags = getFlags(novelId);
+    const items = meter.querySelectorAll("[data-flag]");
+
+    for (const item of items) {
+      if (!(item instanceof HTMLElement)) continue;
+
+      const id = item.dataset.flag;
+      if (!id) continue;
 
       const value = flags[id] ?? 0;
       const fill = item.querySelector("[data-flag-fill]");
