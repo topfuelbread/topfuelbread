@@ -1,6 +1,6 @@
 ---
 interface Props {
-  /** Filename without extension from src/content/ascii/art/ */
+  /** Basename in src/content/ascii/art/ — loads {name}.html and optional {name}.css */
   name: string;
 }
 
@@ -12,8 +12,16 @@ const artModules = import.meta.glob<string>("./art/*.html", {
   eager: true,
 });
 
+const styleModules = import.meta.glob<string>("./art/*.css", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+
 const artPath = `./art/${name}.html`;
+const stylePath = `./art/${name}.css`;
 const asciiHtml = artModules[artPath];
+const artStyle = styleModules[stylePath];
 
 if (!asciiHtml) {
   const available = Object.keys(artModules)
@@ -27,9 +35,11 @@ if (!asciiHtml) {
 }
 ---
 
-<div class="ascii-panel">
+<div class="ascii-panel" data-art={name}>
   <div class="ascii-viewport" set:html={asciiHtml} />
 </div>
+
+{artStyle && <style is:global set:html={artStyle} />}
 
 <style>
   .ascii-panel {

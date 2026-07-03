@@ -1,0 +1,13 @@
+.ascii-panel[data-art="shin"] {
+  border-color: rgb(4, 1, 46);
+  background: rgb(4, 1, 46);
+}
+
+.ascii-panel[data-art="shin"] .ascii-viewport {
+  background: rgb(4, 1, 46);
+}
+
+.ascii-panel[data-art="shin"] .ascii-viewport code {
+  font-size: 8px;
+  color: rgb(0, 255, 149);
+}
