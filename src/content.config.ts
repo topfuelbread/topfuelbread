@@ -11,4 +11,12 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const diary = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/diary" }),
+  schema: z.object({
+    pubDate: z.coerce.date(),
+    asciiArt: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, diary };

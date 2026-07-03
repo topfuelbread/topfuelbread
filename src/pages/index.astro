@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import AsciiContainer from "../content/ascii/AsciiContainer.astro";
+import Diary from "../components/diary/Diary.astro";
 import OldIndex from "../content/old-index.astro";
 const pageTitle = " Welcome!";
 
@@ -42,42 +42,13 @@ const LatestContent = latestPost ? (await render(latestPost)).Content : null;
     )
   }
 
-  <div class="diary">
-    <div>
-      <h3>2026/07/03</h3>
-      <p>아스키아트 구현 작업 중 입니다...,,,,</p>
-      <AsciiContainer name="miyuki" />
-    </div>
-
-    <div class="message-box">
-      <h3>2026/07/02</h3>
-      <h4>
-        무료 AI로 코드짜는건 회사의 유료 아이랑 비교해서 많이 차이가 나네요
-        속도도 그렇고... ㅅㅏ이트 수정할 곳은 많은 데 역시 8월에 퇴사하고
-        취미활동이나 할까요? 여행이랑
-      </h4>
-      게임이나 해야겠네요. 8월에 퇴사하면 9월에 여행가고 10월에 게임하고 11월에 여행가고
-      12월에 게임하고 1월에 여행가고 2월에 게임하고 3월에 여행가고 4월에 게임하고
-      5월에 여행가고 6월에 게임하고 7월에 여행가고 8월에 게임하고 9월에 여행가고 10월에
-      게임하고 11월에 여행가고 12월에 게임하고 1월에 여행가고 2월에 게임하고 3월에
-      여행가고 4월에 게임하고 5월에 여행가고 6월에 게임하고 7월에 여행가고 8월에 게임하고
-    </div>
-
-    <div class="message-box">
-      <h3>2026/07/01</h3>
-      <h1>
-        오랜만의 업데이트가 있겠습니다. 취미용 갠홈을 따로 열기로 하였습니다.
-        그리고 당신은 지금 그곳에 저와 함께 계십니다. 정말 감사합니다.
-      </h1>
-      <h4>이 밑에 있는 내용들은 전 갠홈에서 복붙해온 것들입니다.</h4>
-    </div>
+  <Diary />
 
     *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
     *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
     *** *** *** *** *** *** *** *** *** ***
 
     <OldIndex />
-  </div>
 
   <style>
     .intro-header {

@@ -1,0 +1,93 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import AsciiContainer from "../../content/ascii/AsciiContainer.astro";
+
+interface Props {
+  entry: CollectionEntry<"diary">;
+  linkToPage?: boolean;
+}
+
+const { entry, linkToPage = true } = Astro.props;
+const { Content } = await render(entry);
+
+const pubDate = entry.data.pubDate;
+const dateLabel = [
+  pubDate.getFullYear(),
+  String(pubDate.getMonth() + 1).padStart(2, "0"),
+  String(pubDate.getDate()).padStart(2, "0"),
+].join("/");
+const timeLabel = pubDate.toLocaleTimeString("en-GB", {
+  hour: "2-digit",
+  minute: "2-digit",
+});
+---
+
+<article class="message-box diary-entry">
+  <header class="diary-entry-header">
+    <h3 class="diary-entry-date">
+      {
+        linkToPage ? (
+          <a href={`/diary/${entry.id}/`}>{dateLabel}</a>
+        ) : (
+          dateLabel
+        )
+      }
+    </h3>
+    <time datetime={pubDate.toISOString()} class="diary-entry-time">
+      {timeLabel}
+    </time>
+  </header>
+  <div class="diary-entry-content">
+    <Content />
+  </div>
+  {entry.data.asciiArt && <AsciiContainer name={entry.data.asciiArt} />}
+</article>
+
+<style>
+  .diary-entry {
+    margin-bottom: 1.25rem;
+  }
+
+  .diary-entry-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .diary-entry-date {
+    margin: 0;
+    color: red;
+    text-shadow:
+      darkblue 1px 1px 2px,
+      darkblue -1px -1px 2px,
+      darkblue -1px 1px 2px,
+      darkblue 1px -1px 2px;
+  }
+
+  .diary-entry-date a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .diary-entry-date a:hover {
+    text-decoration: underline;
+  }
+
+  .diary-entry-time {
+    display: block;
+    font-size: 0.85rem;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.651);
+  }
+
+  .diary-entry-content :global(h1) {
+    text-align: center;
+    color: yellow;
+  }
+
+  .diary-entry-content :global(h4) {
+    margin-top: 0;
+  }
+
+  .diary-entry-content :global(p) {
+    margin: 0.5rem 0;
+  }
+</style>

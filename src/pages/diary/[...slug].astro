@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DiaryEntry from "../../components/diary/DiaryEntry.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("diary");
+
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+
+const dateLabel = entry.data.pubDate.toISOString().split("T")[0];
+---
+
+<BaseLayout pageTitle={`Diary ${dateLabel}`}>
+  <DiaryEntry entry={entry} linkToPage={false} />
+</BaseLayout>

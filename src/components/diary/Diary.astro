@@ -1,0 +1,18 @@
+---
+import DiaryEntry from "./DiaryEntry.astro";
+import { getDiaryEntries } from "../../lib/diary";
+
+interface Props {
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+const entries = (await getDiaryEntries()).slice(0, limit ?? Infinity);
+---
+
+<div class="diary">
+  {entries.map((entry) => (
+    <DiaryEntry entry={entry} />
+  ))}
+  <slot />
+</div>
