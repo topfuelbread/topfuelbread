@@ -1,16 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DiaryEntry from "../components/diary/DiaryEntry.astro";
-import LatestBlogPost from "../components/blog/LatestBlogPost.astro";
+import BlogPostSummary from "../components/blog/BlogPostSummary.astro";
 import OldIndex from "../content/old-index.astro";
-import { getLatestBlogPost } from "../lib/blog";
+import { getLatestBlogPostId } from "../lib/blog";
 import { getDiaryEntries } from "../lib/diary";
 
 const pageTitle = " Welcome!";
 
 const diaryEntries = await getDiaryEntries();
 const [firstDiary, ...restDiary] = diaryEntries;
-const latestPost = await getLatestBlogPost();
+const latestPostId = await getLatestBlogPostId();
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -26,7 +26,7 @@ const latestPost = await getLatestBlogPost();
 
   <div class="diary">
     {firstDiary && <DiaryEntry entry={firstDiary} />}
-    {latestPost && <LatestBlogPost post={latestPost} />}
+    {latestPostId && <BlogPostSummary id={latestPostId} />}
     {restDiary.map((entry) => (
       <DiaryEntry entry={entry} />
     ))}
