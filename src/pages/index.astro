@@ -27,18 +27,19 @@ const latestPostId = await getLatestBlogPostId();
   <div class="diary">
     {firstDiary && <DiaryEntry entry={firstDiary} />}
     {latestPostId && <BlogPostSummary id={latestPostId} />}
-    {restDiary.map((entry) => (
-      <DiaryEntry entry={entry} />
-    ))}
-  </div>
+    {restDiary.map((entry) => <DiaryEntry entry={entry} />)}
 
-  *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-  *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-  *** *** *** *** *** *** *** *** *** ***
+    *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+    *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+    *** *** *** *** *** *** *** *** *** ***
+  </div>
 
   <OldIndex />
 
   <style>
+    .diary {
+      padding-bottom: 200px;
+    }
     .intro-header {
       text-align: center;
       margin-bottom: 15px;

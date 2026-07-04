@@ -11,22 +11,18 @@ interface Props {
 const { entry, linkToPage = true } = Astro.props;
 const { Content } = await render(entry);
 
-const { isoLocal, timePart, slashDate: dateLabel } = getPubDateParts(
-  entry.data.pubDate,
-);
+const {
+  isoLocal,
+  timePart,
+  slashDate: dateLabel,
+} = getPubDateParts(entry.data.pubDate);
 const timeLabel = formatTimeLabel(timePart, entry.data.timezone);
 ---
 
 <article class="message-box diary-entry">
   <header class="diary-entry-header">
     <h3 class="diary-entry-date">
-      {
-        linkToPage ? (
-          <a href={`/diary/${entry.id}/`}>{dateLabel}</a>
-        ) : (
-          dateLabel
-        )
-      }
+      {linkToPage ? <a href={`/diary/${entry.id}/`}>{dateLabel}</a> : dateLabel}
     </h3>
     <time datetime={isoLocal} class="diary-entry-time">
       {timeLabel}

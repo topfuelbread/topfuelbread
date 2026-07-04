@@ -8,7 +8,9 @@ const { frontmatter } = Astro.props;
 <BaseLayout pageTitle={frontmatter.title}>
   <div class="content-wrapper">
     <div class="date">
-      Published on {formatBlogPubDate(frontmatter.pubDate, frontmatter.timezone)}
+      Published on {
+        formatBlogPubDate(frontmatter.pubDate, frontmatter.timezone)
+      }
     </div>
     <div class="tags">
       {

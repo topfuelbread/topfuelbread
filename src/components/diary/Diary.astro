@@ -11,8 +11,6 @@ const entries = (await getDiaryEntries()).slice(0, limit ?? Infinity);
 ---
 
 <div class="diary">
-  {entries.map((entry) => (
-    <DiaryEntry entry={entry} />
-  ))}
+  {entries.map((entry) => <DiaryEntry entry={entry} />)}
   <slot />
 </div>
