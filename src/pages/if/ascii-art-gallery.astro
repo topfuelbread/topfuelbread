@@ -1,0 +1,131 @@
+---
+import VnLayout from "../../layouts/VNLayout.astro";
+import AsciiContainer from "../../content/ascii/AsciiContainer.astro";
+
+const pageTitle = "ASCII Art Gallery";
+
+// Get all ASCII art files
+const artModules = import.meta.glob<string>("../../content/ascii/art/**/*.html", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+
+// Extract art names from paths (remove .html extension and ./art/ prefix)
+const artPieces = Object.keys(artModules)
+  .map((path) => path.replace("../../content/ascii/art/", "").replace(".html", ""))
+  .sort();
+
+const ITEMS_PER_PAGE = 6;
+const totalPages = Math.ceil(artPieces.length / ITEMS_PER_PAGE);
+
+// Get current page from URL params (1-indexed)
+const url = new URL(Astro.request.url);
+const pageParam = url.searchParams.get("page");
+const currentPage = Math.max(1, Math.min(totalPages || 1, parseInt(pageParam ?? "1") || 1));
+
+// Get items for current page
+const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+const endIdx = startIdx + ITEMS_PER_PAGE;
+const pageItems = artPieces.slice(startIdx, endIdx);
+---
+
+<VnLayout pageTitle={pageTitle}>
+  <div class="gallery-container">
+    <div class="gallery-grid">
+      {pageItems.map((art) => (
+        <div class="gallery-item">
+          <AsciiContainer name={art} />
+        </div>
+      ))}
+    </div>
+
+    {totalPages > 1 && (
+      <div class="pagination">
+        {currentPage > 1 && (
+          <>
+            <a href="?page=1" class="page-link">First</a>
+            <a href={`?page=${currentPage - 1}`} class="page-link">← Prev</a>
+          </>
+        )}
+
+        <span class="page-info">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        {currentPage < totalPages && (
+          <>
+            <a href={`?page=${currentPage + 1}`} class="page-link">Next →</a>
+            <a href={`?page=${totalPages}`} class="page-link">Last</a>
+          </>
+        )}
+      </div>
+    )}
+  </div>
+</VnLayout>
+
+<style>
+  .gallery-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem 0;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .gallery-item {
+    width: 100%;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1.5rem;
+    border-top: 1px solid #333;
+    margin-top: 1rem;
+  }
+
+  .page-link {
+    padding: 0.5rem 1rem;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #00ff00;
+    text-decoration: none;
+    font-family: monospace;
+    transition: all 0.2s ease;
+  }
+
+  .page-link:hover {
+    background: #2a2a2a;
+    border-color: #00ff00;
+  }
+
+  .page-info {
+    font-family: monospace;
+    color: #888;
+    min-width: 150px;
+    text-align: center;
+  }
+
+  @media (max-width: 1200px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
