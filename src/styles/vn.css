@@ -1,6 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap");
+
 html {
-  background-color: #352e78;
-  color: white;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
+  color: #00ffff;
+  font-family: "JetBrains Mono", monospace;
 }
 
 .vn-stage {
@@ -18,18 +21,29 @@ html {
   background: rgba(53, 46, 120, 0.9);
   padding: 1rem 1.25rem;
   text-align: left;
+  box-shadow:
+    0 0 20px rgba(0, 255, 255, 0.5),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+  position: relative;
 }
 
 .vn-speaker {
   color: #ff7bff;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 10px rgba(255, 0, 255, 0.8),
+    0 0 20px rgba(0, 255, 255, 0.3);
 }
 
 .vn-text {
   color: #e8e8e8;
   line-height: 1.6;
   margin: 0;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
 }
 
 .vn-choices {
@@ -40,20 +54,37 @@ html {
 }
 
 .vn-choice {
-  background-color: #ff7bff9b;
-  color: white;
-  border: 2px solid hotpink;
-  padding: 0.75rem 1.25rem;
-  text-align: center;
+  background-color: rgba(0, 255, 255, 0.1);
+  color: #00ffff;
+  border: 2px solid #00ffff;
+  padding: 1rem 1.5rem;
+  text-align: left;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.15s;
+  border-radius: 0;
+  transition: all 0.25s ease;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.vn-choice::before {
+  content: "▶ ";
+  margin-right: 8px;
 }
 
 .vn-choice:hover {
-  background-color: #ff7bff;
+  background-color: rgba(255, 0, 255, 0.2);
+  color: #ff00ff;
+  border-color: #ff00ff;
+  text-shadow:
+    0 0 10px rgba(255, 0, 255, 0.8),
+    0 0 20px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
 }
 
 .vn-flag-meter {
@@ -71,55 +102,85 @@ html {
 }
 
 .vn-flag-label {
-  color: #ff7bff;
+  color: #ff00ff;
   min-width: 4.5rem;
+  text-shadow: 0 0 8px rgba(255, 0, 255, 0.6);
 }
 
 .vn-flag-bar {
   width: 80px;
-  height: 8px;
-  background: #1a1a2e;
-  border-radius: 4px;
+  height: 10px;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid #00ffff;
+  border-radius: 0;
   overflow: hidden;
+  box-shadow: inset 0 0 8px rgba(0, 255, 255, 0.2);
 }
 
 .vn-flag-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ff7bff, hotpink);
-  border-radius: 4px;
-  transition: width 0.2s;
+  background: linear-gradient(90deg, #00ffff, #ff00ff);
+  border-radius: 0;
+  transition: width 0.3s;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
 
 .vn-flag-value {
-  color: #ccc;
+  color: #00ffff;
   min-width: 2rem;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.5);
 }
 
 .vn-game-body {
-  background-color: #1a1a2e;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
   min-height: 100vh;
   margin: 0;
   width: 100%;
   max-width: 100vw;
+  position: relative;
+}
+
+.vn-game-body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 .vn-game-frame {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 2rem 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 .vn-game-back {
   align-self: flex-start;
-  color: #888;
-  font-size: 0.85rem;
+  color: #00ffff;
+  font-size: 0.9rem;
   text-decoration: none;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
 }
 
 .vn-game-back:hover {
-  color: #ff7bff;
+  color: #ff00ff;
+  text-shadow: 0 0 12px rgba(255, 0, 255, 0.8);
 }
 
 .vn-game-content {
@@ -128,4 +189,5 @@ html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
