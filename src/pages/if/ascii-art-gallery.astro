@@ -5,15 +5,20 @@ import AsciiContainer from "../../content/ascii/AsciiContainer.astro";
 const pageTitle = "ASCII Art Gallery";
 
 // Get all ASCII art files
-const artModules = import.meta.glob<string>("../../content/ascii/art/**/*.html", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-});
+const artModules = import.meta.glob<string>(
+  "../../content/ascii/art/**/*.html",
+  {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  },
+);
 
 // Extract art names from paths (remove .html extension and ./art/ prefix)
 const artPieces = Object.keys(artModules)
-  .map((path) => path.replace("../../content/ascii/art/", "").replace(".html", ""))
+  .map((path) =>
+    path.replace("../../content/ascii/art/", "").replace(".html", ""),
+  )
   .sort();
 
 const ITEMS_PER_PAGE = 6;
@@ -22,45 +27,70 @@ const totalPages = Math.ceil(artPieces.length / ITEMS_PER_PAGE);
 // Get current page from URL params (1-indexed)
 const url = new URL(Astro.request.url);
 const pageParam = url.searchParams.get("page");
-const currentPage = Math.max(1, Math.min(totalPages || 1, parseInt(pageParam ?? "1") || 1));
+const currentPage = Math.max(
+  1,
+  Math.min(totalPages || 1, parseInt(pageParam ?? "1") || 1),
+);
 
 // Get items for current page
 const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
 const endIdx = startIdx + ITEMS_PER_PAGE;
 const pageItems = artPieces.slice(startIdx, endIdx);
+
+// Helper to convert filename to fancy title
+const getTitleFromArt = (art: string) => {
+  const name = art.split("/").pop() ?? art;
+  return name
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
 ---
 
 <VnLayout pageTitle={pageTitle}>
   <div class="gallery-container">
     <div class="gallery-grid">
-      {pageItems.map((art) => (
-        <div class="gallery-item">
-          <AsciiContainer name={art} />
-        </div>
-      ))}
+      {
+        pageItems.map((art) => (
+          <div class="gallery-item">
+            <div class="item-title">{getTitleFromArt(art)}</div>
+            <AsciiContainer name={art} />
+          </div>
+        ))
+      }
     </div>
 
-    {totalPages > 1 && (
-      <div class="pagination">
-        {currentPage > 1 && (
-          <>
-            <a href="?page=1" class="page-link">First</a>
-            <a href={`?page=${currentPage - 1}`} class="page-link">← Prev</a>
-          </>
-        )}
+    {
+      totalPages > 1 && (
+        <div class="pagination">
+          {currentPage > 1 && (
+            <>
+              <a href="?page=1" class="page-link">
+                First
+              </a>
+              <a href={`?page=${currentPage - 1}`} class="page-link">
+                ← Prev
+              </a>
+            </>
+          )}
 
-        <span class="page-info">
-          Page {currentPage} of {totalPages}
-        </span>
+          <span class="page-info">
+            Page {currentPage} of {totalPages}
+          </span>
 
-        {currentPage < totalPages && (
-          <>
-            <a href={`?page=${currentPage + 1}`} class="page-link">Next →</a>
-            <a href={`?page=${totalPages}`} class="page-link">Last</a>
-          </>
-        )}
-      </div>
-    )}
+          {currentPage < totalPages && (
+            <>
+              <a href={`?page=${currentPage + 1}`} class="page-link">
+                Next →
+              </a>
+              <a href={`?page=${totalPages}`} class="page-link">
+                Last
+              </a>
+            </>
+          )}
+        </div>
+      )
+    }
   </div>
 </VnLayout>
 
@@ -80,7 +110,44 @@ const pageItems = artPieces.slice(startIdx, endIdx);
   }
 
   .gallery-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+    max-height: 700px;
+  }
+
+  .item-title {
+    font-family: "Georgia", serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    color: #00ff00;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    padding: 0.5rem 0;
+    border-bottom: 2px solid #00ff00;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Override AsciiContainer to be fixed size */
+  .gallery-item :global(.ascii-panel) {
     width: 100%;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .gallery-item :global(.ascii-viewport) {
+    flex: 1;
+    overflow: auto;
+    max-height: 100%;
+  }
+
+  .gallery-item :global(code) {
+    font-size: 9px !important;
   }
 
   .pagination {
