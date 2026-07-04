@@ -79,16 +79,15 @@
   }
 }
 
-
 .neon-text {
   font-size: 48px;
   color: #fff;
   text-shadow:
-      0 0 5px #0ff,
-      0 0 10px #0ff,
-      0 0 20px #0ff,
-      0 0 40px #0ff,
-      0 0 80px #0ff;
+    0 0 5px #0ff,
+    0 0 10px #0ff,
+    0 0 20px #0ff,
+    0 0 40px #0ff,
+    0 0 80px #0ff;
   padding: 20px;
   text-align: center;
 }
@@ -99,12 +98,12 @@
   font-weight: 900;
   color: #ffffff;
   text-shadow:
-      -2px -2px 0 #000,
-      2px -2px 0 #fffc52,
-      -2px 2px 0 #d0ff00,
-      2px 2px 0 #fffb0b,
-      -3px 0px 0 #e5ff00,
-      3px 0px 0 #fbff00,
-      0px -3px 0 #fff020,
-      0px 3px 0 #8400ff;
+    -2px -2px 0 #000,
+    2px -2px 0 #fffc52,
+    -2px 2px 0 #d0ff00,
+    2px 2px 0 #fffb0b,
+    -3px 0px 0 #e5ff00,
+    3px 0px 0 #fbff00,
+    0px -3px 0 #fff020,
+    0px 3px 0 #8400ff;
 }

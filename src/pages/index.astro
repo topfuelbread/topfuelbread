@@ -32,14 +32,12 @@ const latestPostId = await getLatestBlogPostId();
       featuredTwt && (
         <section class="featured-twt">
           <p class="featured-twt__label">New!</p>
-          <Twt entry={featuredTwt} />
+          <Twt entry={featuredTwt} featured />
         </section>
       )
     }
     <!-- {latestPostId && <BlogPostSummary id={latestPostId} />} -->
-    {olderMainTwts.map((entry) => (
-      <Twt entry={entry} />
-    ))}
+    {olderMainTwts.map((entry) => <Twt entry={entry} />)}
   </div>
 
   <style>

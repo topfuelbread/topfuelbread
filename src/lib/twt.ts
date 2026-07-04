@@ -33,8 +33,12 @@ export async function getTwts(): Promise<TwtEntry[]> {
   return [...(await getCollection("twt"))].sort(sortByTwtIdDesc);
 }
 
-export async function getTwtDates(): Promise<{ date: string; daySlug: string }[]> {
-  const dates = [...new Set((await getTwts()).map((t) => parseTwtId(t.id).date))];
+export async function getTwtDates(): Promise<
+  { date: string; daySlug: string }[]
+> {
+  const dates = [
+    ...new Set((await getTwts()).map((t) => parseTwtId(t.id).date)),
+  ];
   return dates
     .sort((a, b) => b.localeCompare(a))
     .map((date) => ({ date, daySlug: date.replace(/-/g, "/") }));

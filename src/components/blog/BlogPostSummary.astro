@@ -42,13 +42,11 @@ const daySlug = pubDateToSlug(post.data.pubDate);
           >
             <Content />
           </div>
-          {
-            likelyTruncated && (
-              <a class="read-more" href={`/${post.id}/`}>
-                Read more
-              </a>
-            )
-          }
+          {likelyTruncated && (
+            <a class="read-more" href={`/${post.id}/`}>
+              Read more
+            </a>
+          )}
         </>
       )
     }

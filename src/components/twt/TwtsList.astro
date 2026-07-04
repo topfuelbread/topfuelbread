@@ -13,9 +13,15 @@ const visible = limit ? entries.slice(0, limit) : entries;
 ---
 
 <div class="twts-list">
-  {visible.map((entry) => (
-    <Twt entry={entry} linkToDay={linkToDay} />
-  ))}
+  {
+    visible.map((entry) => (
+      <Twt
+        entry={entry}
+        linkToDay={linkToDay}
+        featured={entry.data.tags?.includes("main")}
+      />
+    ))
+  }
 </div>
 
 <style>

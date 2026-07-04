@@ -8,8 +8,7 @@ All contents are fictional.
 - do not waste tokens on extra verifications that I can easily do
 - when completed a task, if it's not a small task, log the changes at the bottom of this README.md file. I added # AI Outputs section for you.
 
-***
-
+---
 
 # TODO List
 
@@ -28,9 +27,6 @@ Blog and diary entries live under `src/content/`. Each entry’s content collect
 Public URLs use the same path: `/blog/2026/07/04/`, `/diary/2026/07/04/`, `/twt/2026/07/04/`.
 
 Twt frontmatter: `title`, optional `tags`, optional `asciiArt`. Datetime comes from the file path only — no `id` or `pubDate` fields.
-
-
-
 
 # Development
 
@@ -51,9 +47,6 @@ Twt frontmatter: `title`, optional `tags`, optional `asciiArt`. Datetime comes f
 ### Astro Links
 
 https://docs.astro.build/en/guides/markdown-content/
-
-
-
 
 # AI Outputs
 

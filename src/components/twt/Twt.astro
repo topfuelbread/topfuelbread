@@ -6,14 +6,15 @@ import { parseTwtId } from "../../lib/twt";
 type Props = {
   entry: CollectionEntry<"twt">;
   linkToDay?: boolean;
+  featured?: boolean;
 };
 
-const { entry, linkToDay = true } = Astro.props;
+const { entry, linkToDay = true, featured = false } = Astro.props;
 const { Content } = await render(entry);
 const { daySlug, sortKey } = parseTwtId(entry.id);
 ---
 
-<div class="twt">
+<div class:list={["twt", { "twt--featured": featured }]}>
   <article class="twt-card">
     <header class="twt-header">
       <h3 class="twt-title">
@@ -84,10 +85,42 @@ const { daySlug, sortKey } = parseTwtId(entry.id);
     text-align: left;
     color: black;
     text-shadow: 5px 5px 5px rgb(0, 255, 255);
-    border-bottom: 1px solid purple;
   }
 
   .twt-content :global(p) {
     margin: 0.5rem 0;
+  }
+
+  .twt--featured {
+    border: 2px dotted #ffd700;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 215, 0, 0.35),
+      rgba(255, 180, 0, 0.2)
+    );
+    box-shadow:
+      0 0 16px rgba(255, 215, 0, 0.45),
+      inset 0 0 24px rgba(255, 215, 0, 0.12);
+  }
+
+  .twt--featured .twt-title {
+    color: #ffd700;
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #fffc52,
+      -1px 1px 0 #dbb800,
+      1px 1px 0 #ff9500,
+      0 0 8px rgba(255, 215, 0, 0.8);
+    text-decoration-color: #ffb300;
+  }
+
+  .twt--featured .twt-id {
+    color: #fff8dc;
+    text-shadow: 1px 1px 3px rgba(139, 90, 0, 0.8);
+  }
+
+  .twt--featured .twt-content {
+    text-shadow: 2px 2px 4px rgba(255, 200, 0, 0.55);
+    border-bottom-color: #ffd700;
   }
 </style>

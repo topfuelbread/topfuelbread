@@ -12,27 +12,33 @@ const { Content } = await render(entry);
 ---
 
 <div class="diary-entry">
-<article class="entry">
-  <header class="entry-header">
-    <h3 class="entry-date">
-      {linkToPage ? <a href={`/${entry.id}/`}>{entry.data.pubDate}</a> : entry.data.pubDate}
-    </h3>
-  </header>
-  <div class="entry-content">
-    <Content />
-  </div>
-  {entry.data.asciiArt && <AsciiContainer name={entry.data.asciiArt} />}
-</article>
+  <article class="entry">
+    <header class="entry-header">
+      <h3 class="entry-date">
+        {
+          linkToPage ? (
+            <a href={`/${entry.id}/`}>{entry.data.pubDate}</a>
+          ) : (
+            entry.data.pubDate
+          )
+        }
+      </h3>
+    </header>
+    <div class="entry-content">
+      <Content />
+    </div>
+    {entry.data.asciiArt && <AsciiContainer name={entry.data.asciiArt} />}
+  </article>
 </div>
 
 <style>
-    .diary-entry {
-      border: 1px dotted pink;
-      padding: 10px;
-      margin-bottom: 20px;
-      background-color: rgba(255, 255, 255, 0.3);
-      color:black;
-    }
+  .diary-entry {
+    border: 1px dotted pink;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: black;
+  }
 
   .entry {
     margin-bottom: 1.25rem;
@@ -66,7 +72,6 @@ const { Content } = await render(entry);
     text-align: center;
     color: black;
     text-shadow: 5px 5px 5px rgb(0, 255, 255);
-    border-bottom: 1px solid purple;
   }
 
   .entry-content :global(h1) {
