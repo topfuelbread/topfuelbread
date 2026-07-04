@@ -1,8 +1,12 @@
 Astro.js-based personal website.
 All contents are fictional.
 
-For AI, prioritize clean code and efficiency. Do minimal (as in clean and optimized) work.
-Also refer to Astro symmentics every time.
+# AI Instructions
+
+- prioritize clean code and efficiency. Do minimal (as in clean and optimized) work.
+- refer to Astro symmentics every time.
+- do not waste tokens on extra verifications that I can easily do
+- when completed a task, if it's not a small task, log the changes at the bottom of this README.md file. I added # AI Outputs section for you.
 
 ***
 
@@ -50,3 +54,8 @@ Public URLs use the same path: `/blog/2026/07/04/`, `/diary/2026/07/04/`.
 ### Astro Links
 
 https://docs.astro.build/en/guides/markdown-content/
+
+
+
+
+# AI Outputs
