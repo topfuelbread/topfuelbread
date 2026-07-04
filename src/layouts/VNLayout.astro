@@ -1,10 +1,36 @@
 ---
-import RootLayout from "./RootLayout.astro";
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+import "../styles/page-layout.css";
+import "../styles/animation.css";
 import "../styles/vn.css";
 const { pageTitle } = Astro.props;
 ---
 
-<RootLayout pageTitle={pageTitle}>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <script
+      src="https://kit.fontawesome.com/8f35e4c463.js"
+      crossorigin="anonymous"></script>
+    <!-- mouse cursor  https://github.com/tholman/cursor-effects -->
+    <script type="module">
+      import { fairyDustCursor } from "https://unpkg.com/cursor-effects@latest/dist/esm.js";
+      new fairyDustCursor();
+    </script>
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="topfuelbread.com RSS"
+      href={Astro.site ? new URL("rss.xml", Astro.site).href : "/rss.xml"}
+    />
+
+    <ClientRouter />
+
+    <title>{pageTitle || "topfuelbread"}</title>
+  </head>
   <body class="vn-game-body">
     <div class="vn-game-frame">
       <a href="/if/" class="vn-game-back">← back to site</a>
@@ -13,7 +39,7 @@ const { pageTitle } = Astro.props;
       </main>
     </div>
   </body>
-</RootLayout>
+</html>
 
 <style>
   :global(html) {

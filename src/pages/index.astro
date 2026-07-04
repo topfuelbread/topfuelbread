@@ -24,12 +24,13 @@ const latestPostId = await getLatestBlogPostId();
           src="https://blob.gifcities.org/gifcities/V54WUS2GWCSI647WCDLP5SF6DQZ75RZA.gif"
         /></a
       >
+      <p>위 웰컴을 클릭하시면 다른 세계로 데려가 준다네요</p>
     </div>
   </div>
 
   <div class="diary">
-    {firstDiary && <DiaryEntry entry={firstDiary} />}
     {latestPostId && <BlogPostSummary id={latestPostId} />}
+    {firstDiary && <DiaryEntry entry={firstDiary} />}
     {restDiary.map((entry) => <DiaryEntry entry={entry} />)}
   </div>
 
