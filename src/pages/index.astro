@@ -1,16 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import DiaryEntry from "../components/diary/DiaryEntry.astro";
+import Twt from "../components/twt/Twt.astro";
 import BlogPostSummary from "../components/blog/BlogPostSummary.astro";
 import { getLatestBlogPostId } from "../lib/blog";
-import { getDiaryEntries } from "../lib/diary";
+import { getMainTwts } from "../lib/twt";
 
 const pageTitle = "Welcome!";
 
-const diaryEntries = [...(await getDiaryEntries())].sort((a, b) =>
-  b.id.localeCompare(a.id),
-);
-const [featuredDiaryEntry, ...olderDiaryEntries] = diaryEntries;
+const mainTwts = await getMainTwts();
+const [featuredTwt, ...olderMainTwts] = mainTwts;
 const latestPostId = await getLatestBlogPostId();
 ---
 
@@ -31,16 +29,16 @@ const latestPostId = await getLatestBlogPostId();
 
   <div class="content-wrapper">
     {
-      featuredDiaryEntry && (
-        <section class="featured-diary">
-          <p class="featured-diary__label">New!</p>
-          <DiaryEntry entry={featuredDiaryEntry} />
+      featuredTwt && (
+        <section class="featured-twt">
+          <p class="featured-twt__label">New!</p>
+          <Twt entry={featuredTwt} />
         </section>
       )
     }
     {latestPostId && <BlogPostSummary id={latestPostId} />}
-    {olderDiaryEntries.map((entry) => (
-      <DiaryEntry entry={entry} />
+    {olderMainTwts.map((entry) => (
+      <Twt entry={entry} />
     ))}
   </div>
 
@@ -58,11 +56,11 @@ const latestPostId = await getLatestBlogPostId();
       text-decoration: none;
     }
 
-    .featured-diary {
+    .featured-twt {
       margin-bottom: 20px;
     }
 
-    .featured-diary__label {
+    .featured-twt__label {
       margin: 0 0 0.5rem;
       font-size: 25px;
       font-weight: bold;

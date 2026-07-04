@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TwtsForDay from "../../components/twt/TwtsForDay.astro";
+import { getTwts } from "../../lib/twt";
+
+export async function getStaticPaths() {
+  const twts = await getTwts();
+  const dates = [...new Set(twts.map((t) => t.data.pubDate.slice(0, 10)))];
+
+  return dates.map((date) => ({
+    params: { slug: date.replace(/-/g, "/") },
+    props: { date },
+  }));
+}
+
+const { date } = Astro.props;
+const pageTitle = `TWT ${date}`;
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <div class="content-wrapper">
+    <h3>{date}</h3>
+    <TwtsForDay date={date} linkToDay={false} />
+  </div>
+</BaseLayout>
+
+<style>
+  .content-wrapper {
+    border: dotted 2px #79ffcc;
+    background-color: #cbfff631;
+    padding: 10px;
+    text-align: center;
+  }
+
+  h3 {
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.651);
+  }
+</style>

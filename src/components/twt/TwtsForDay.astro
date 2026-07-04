@@ -1,0 +1,26 @@
+---
+import TwtsList from "./TwtsList.astro";
+import { getTwtsByDate } from "../../lib/twt";
+
+type Props = {
+  date: string;
+  linkToDay?: boolean;
+};
+
+const { date, linkToDay = false } = Astro.props;
+const entries = await getTwtsByDate(date);
+---
+
+{
+  entries.length > 0 && (
+    <section class="twts-for-day">
+      <TwtsList entries={entries} linkToDay={linkToDay} />
+    </section>
+  )
+}
+
+<style>
+  .twts-for-day {
+    margin-bottom: 1.5rem;
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+import Twt from "./Twt.astro";
+import type { TwtEntry } from "../../lib/twt";
+
+type Props = {
+  entries: TwtEntry[];
+  limit?: number;
+  linkToDay?: boolean;
+};
+
+const { entries, limit, linkToDay = true } = Astro.props;
+const visible = limit ? entries.slice(0, limit) : entries;
+---
+
+<div class="twts-list">
+  {visible.map((entry) => (
+    <Twt entry={entry} linkToDay={linkToDay} />
+  ))}
+</div>
+
+<style>
+  .twts-list {
+    width: 100%;
+  }
+</style>

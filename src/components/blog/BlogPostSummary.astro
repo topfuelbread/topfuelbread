@@ -1,6 +1,7 @@
 ---
 import { render } from "astro:content";
 import { getBlogPost } from "../../lib/blog";
+import { pubDateToSlug } from "../../lib/twt";
 
 interface Props {
   /** Content collection id, e.g. `blog/2026/07/03` */
@@ -15,8 +16,11 @@ if (!post) {
 }
 
 const { Content } = await render(post);
+const bodyTrimmed = (post.body ?? "").trim();
+const isEmpty = bodyTrimmed.length === 0;
 const SUMMARY_LIMIT = 300;
-const likelyTruncated = (post.body ?? "").trim().length > SUMMARY_LIMIT;
+const likelyTruncated = !isEmpty && bodyTrimmed.length > SUMMARY_LIMIT;
+const daySlug = pubDateToSlug(post.data.pubDate);
 ---
 
 <div class="blog-post-summary-container">
@@ -25,17 +29,27 @@ const likelyTruncated = (post.body ?? "").trim().length > SUMMARY_LIMIT;
     <h3>
       <a href={`/${post.id}/`}>{post.data.title}</a>
     </h3>
-    <div
-      class:list={["post-content", { "is-truncated": likelyTruncated }]}
-      data-preview-max-height="300"
-    >
-      <Content />
-    </div>
     {
-      likelyTruncated && (
-        <a class="read-more" href={`/${post.id}/`}>
-          Read more
+      isEmpty ? (
+        <a class="read-more" href={`/twt/${daySlug}/`}>
+          View today's twts →
         </a>
+      ) : (
+        <>
+          <div
+            class:list={["post-content", { "is-truncated": likelyTruncated }]}
+            data-preview-max-height="300"
+          >
+            <Content />
+          </div>
+          {
+            likelyTruncated && (
+              <a class="read-more" href={`/${post.id}/`}>
+                Read more
+              </a>
+            )
+          }
+        </>
       )
     }
   </article>
@@ -47,7 +61,7 @@ const likelyTruncated = (post.body ?? "").trim().length > SUMMARY_LIMIT;
     background-color: #cbfff631;
     padding: 10px;
     margin-bottom: 20px;
-    text-align: center;
+    text-align: left;
   }
 
   .blog-post-summary .pub-date {
