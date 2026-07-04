@@ -5,6 +5,10 @@ All contents are fictional.
 
 ### Commands
 
+#### Run the website locally
+
+`npm run dev`
+
 #### Run to format
 
 `npx prettier . --write`

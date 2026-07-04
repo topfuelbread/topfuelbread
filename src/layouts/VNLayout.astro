@@ -1,0 +1,17 @@
+---
+import RootLayout from "./RootLayout.astro";
+import "../styles/vn.css";
+const { pageTitle } = Astro.props;
+---
+
+<RootLayout pageTitle={pageTitle}>
+  <body class="vn-game-body">
+    <div class="vn-game-frame">
+      <a href="/" class="vn-game-back">← back to site</a>
+      <main class="vn-game-content" transition:animate="fade">
+        <slot />
+      </main>
+    </div>
+  </body>
+</RootLayout>
+<style></style>

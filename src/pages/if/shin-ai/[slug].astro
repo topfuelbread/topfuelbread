@@ -1,6 +1,6 @@
 ---
 import VisualNovelScene from "../../../components/vn/VisualNovelScene.astro";
-import VisualNovelLayout from "../../../layouts/VisualNovelLayout.astro";
+import VnLayout from "../../../layouts/VNLayout.astro";
 import { shinAi } from "../../../lib/vn/novels/shin-ai/config";
 import { getScene, scenes } from "../../../lib/vn/novels/shin-ai/scenes";
 
@@ -12,10 +12,10 @@ const { slug } = Astro.params;
 const scene = getScene(slug!);
 ---
 
-<VisualNovelLayout pageTitle={scene.title}>
+<VnLayout pageTitle={scene.title}>
   <VisualNovelScene
     scene={scene}
     novelId={shinAi.id}
     flagIds={shinAi.flagIds}
   />
-</VisualNovelLayout>
+</VnLayout>

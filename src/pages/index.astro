@@ -2,7 +2,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DiaryEntry from "../components/diary/DiaryEntry.astro";
 import BlogPostSummary from "../components/blog/BlogPostSummary.astro";
-import OldIndex from "../content/old-index.astro";
 import { getLatestBlogPostId } from "../lib/blog";
 import { getDiaryEntries } from "../lib/diary";
 
@@ -19,22 +18,20 @@ const latestPostId = await getLatestBlogPostId();
       안녕하세요 파란새에게 유령밴을 당한 코가 길어 슬픈 개미핥기의 갠홈에
       어서오세요...
     </h2>
-    <img
-      src="https://blob.gifcities.org/gifcities/V54WUS2GWCSI647WCDLP5SF6DQZ75RZA.gif"
-    />
+    <div class="transfer-to-if-side">
+      <a href="/if/">
+        <img
+          src="https://blob.gifcities.org/gifcities/V54WUS2GWCSI647WCDLP5SF6DQZ75RZA.gif"
+        /></a
+      >
+    </div>
   </div>
 
   <div class="diary">
     {firstDiary && <DiaryEntry entry={firstDiary} />}
     {latestPostId && <BlogPostSummary id={latestPostId} />}
     {restDiary.map((entry) => <DiaryEntry entry={entry} />)}
-
-    *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-    *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-    *** *** *** *** *** *** *** *** *** ***
   </div>
-
-  <OldIndex />
 
   <style>
     .diary {
@@ -67,6 +64,9 @@ const latestPostId = await getLatestBlogPostId();
         darkblue -1px -1px 2px,
         darkblue -1px 1px 2px,
         darkblue 1px -1px 2px;
+    }
+
+    .transfer-to-if-side {
     }
   </style>
 </BaseLayout>

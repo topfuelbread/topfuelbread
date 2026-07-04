@@ -4,40 +4,18 @@ import { ClientRouter } from "astro:transitions";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import "../styles/global.css";
+import "../styles/main-page.css";
 import "../styles/page-layout.css";
 import "../styles/animation.css";
 
 import RightSideBar from "../components/layout/RightSideBar.astro";
 import LeftSideBar from "../components/layout/LeftSideBar.astro";
 import PageTitle from "../components/layout/PageTitle.astro";
+import RootLayout from "./RootLayout.astro";
 const { pageTitle } = Astro.props;
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <script
-      src="https://kit.fontawesome.com/8f35e4c463.js"
-      crossorigin="anonymous"></script>
-    <!-- mouse cursor  https://github.com/tholman/cursor-effects -->
-    <script type="module">
-      import { fairyDustCursor } from "https://unpkg.com/cursor-effects@latest/dist/esm.js";
-      new fairyDustCursor();
-    </script>
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title="topfuelbread.com RSS"
-      href={new URL("rss.xml", Astro.site)}
-    />
-
-    <ClientRouter />
-
-    <title>topfuelbread:: {pageTitle}</title>
-  </head>
-  <!-- <body transition:persist> remove if buggy -->
+<RootLayout>
   <body transition:persist>
     <div class="grid-container">
       <div class="grid-item layout-top">
@@ -58,6 +36,5 @@ const { pageTitle } = Astro.props;
       <div class="grid-item layout-bottom"><Footer /></div>
     </div>
   </body>
-</html>
-
+</RootLayout>
 <style></style>
