@@ -1,4 +1,5 @@
 ---
+import AboutMe from "../widgets/AboutMe.astro";
 import TodoList from "../widgets/TodoList.astro";
 ---
 
@@ -6,16 +7,7 @@ import TodoList from "../widgets/TodoList.astro";
   <center>
     <div class="divider">************</div>
   </center>
-  <div class="about-me">
-    <h3>[자기소개]</h3>
-    <span
-      >녕하세요. 긴코개미핥기 입니다. 
-      장래희망은 익룡이고요. 좋아하는건
-      예술과 당신입니다.
-      안
-      </span
-    >
-  </div>
+  <AboutMe />
   <div class="logos">
     <a href="/rss.xml"><i class="fa-solid fa-square-rss"></i></a>
     <a
@@ -56,25 +48,6 @@ import TodoList from "../widgets/TodoList.astro";
     .divider {
       padding: 10px 0px;
       color: rgb(255, 112, 255);
-    }
-
-    .about-me {
-      text-align: center;
-      color: cadetblue;
-      text-shadow: pink 0 1px;
-      border: pink 5px dotted;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.4;
-      padding-bottom: 10px;
-    }
-
-    .about-me li {
-      margin-bottom: 2px;
-    }
-
-    .about-me b {
-      font-weight: 800;
     }
 
     .sidebar {
