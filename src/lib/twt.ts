@@ -25,10 +25,6 @@ function sortByTwtIdDesc(a: TwtEntry, b: TwtEntry): number {
   return parseTwtId(b.id).sortKey.localeCompare(parseTwtId(a.id).sortKey);
 }
 
-function sortByTwtIdAsc(a: TwtEntry, b: TwtEntry): number {
-  return parseTwtId(a.id).sortKey.localeCompare(parseTwtId(b.id).sortKey);
-}
-
 export async function getTwts(): Promise<TwtEntry[]> {
   return [...(await getCollection("twt"))].sort(sortByTwtIdDesc);
 }
@@ -50,16 +46,9 @@ export async function getLatestTwts(n: number): Promise<TwtEntry[]> {
 
 export async function getTwtsByDate(date: string): Promise<TwtEntry[]> {
   const normalized = normalizeDate(date);
-  const entries = (await getCollection("twt")).filter(
-    (entry) => parseTwtId(entry.id).date === normalized,
-  );
-
-  const main = entries.filter((e) => e.data.tags?.includes("main"));
-  const rest = entries
-    .filter((e) => !e.data.tags?.includes("main"))
-    .sort(sortByTwtIdAsc);
-
-  return [...main.sort(sortByTwtIdAsc), ...rest];
+  return (await getCollection("twt"))
+    .filter((entry) => parseTwtId(entry.id).date === normalized)
+    .sort(sortByTwtIdDesc);
 }
 
 export async function getMainTwts(): Promise<TwtEntry[]> {
