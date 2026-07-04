@@ -36,7 +36,7 @@ const latestPostId = await getLatestBlogPostId();
         </section>
       )
     }
-    {latestPostId && <BlogPostSummary id={latestPostId} />}
+    <!-- {latestPostId && <BlogPostSummary id={latestPostId} />} -->
     {olderMainTwts.map((entry) => (
       <Twt entry={entry} />
     ))}
