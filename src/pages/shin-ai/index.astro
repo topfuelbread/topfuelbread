@@ -1,3 +1,16 @@
 ---
-return Astro.redirect("/shin-ai/intro/");
+import VisualNovelScene from "../../components/vn/VisualNovelScene.astro";
+import VisualNovelLayout from "../../layouts/VisualNovelLayout.astro";
+import { shinAi } from "../../lib/vn/novels/shin-ai/config";
+import { getScene } from "../../lib/vn/novels/shin-ai/scenes";
+
+const scene = getScene("intro");
 ---
+
+<VisualNovelLayout pageTitle={scene.title}>
+  <VisualNovelScene
+    scene={scene}
+    novelId={shinAi.id}
+    flagIds={shinAi.flagIds}
+  />
+</VisualNovelLayout>
