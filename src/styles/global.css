@@ -1,5 +1,6 @@
 /* Minimal essential styles for all layouts */
 @import url(https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css);
+@import 'blur-container.css';
 
 * {
   box-sizing: border-box;
