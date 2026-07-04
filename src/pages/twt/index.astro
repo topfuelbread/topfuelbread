@@ -17,19 +17,18 @@ const latestDateTwts = latestDay
 
 <BaseLayout pageTitle={pageTitle}>
   <div class="content-wrapper">
-    {topMainTwt && <Twt entry={topMainTwt} linkToDay={false} featured />}
-
     {
       latestDay && latestDateTwts.length > 0 && (
         <section class="latest-date-twts">
-          <h4>{latestDay.date}</h4>
+          <h3>{latestDay.date}</h3>
+          {topMainTwt && <Twt entry={topMainTwt} linkToDay={false} featured />}
           <TwtsList entries={latestDateTwts} linkToDay={false} />
         </section>
       )
     }
 
     <section class="twt-dates">
-      <h4>By date</h4>
+      <h4>More entries by dates</h4>
       <ul>
         {
           dates.map(({ date, daySlug }) => (
@@ -56,13 +55,6 @@ const latestDateTwts = latestDay
     color: white;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.651);
     text-align: center;
-  }
-
-  .latest-date-twts {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: dotted 2px #79ffcc;
-    text-align: left;
   }
 
   .twt-dates {
@@ -94,12 +86,14 @@ const latestDateTwts = latestDay
     display: inline-block;
     color: #ffe0f3;
     font-family: monospace;
-    font-size: 1.25rem;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.04em;
     text-decoration: none;
     text-shadow: 1px 1px 3px rgba(255, 0, 155, 0.75);
-    transition: color 0.15s ease, transform 0.15s ease;
+    transition:
+      color 0.15s ease,
+      transform 0.15s ease;
   }
 
   .twt-dates a:hover {

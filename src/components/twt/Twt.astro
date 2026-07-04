@@ -18,13 +18,7 @@ const { daySlug, time } = parseTwtId(entry.id);
   <article class="twt-card">
     <header class="twt-header">
       <h3 class="twt-title">
-        {
-          linkToDay ? (
-            <a href={`/twt/${daySlug}/`}>{time}</a>
-          ) : (
-            time
-          )
-        }
+        {linkToDay ? <a href={`/twt/${daySlug}/`}>{time}</a> : time}
       </h3>
     </header>
     <div class="twt-content">
