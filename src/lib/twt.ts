@@ -12,6 +12,7 @@ export function parseTwtId(entryId: string) {
   const [, y, m, d, hm] = match;
   return {
     date: `${y}-${m}-${d}`,
+    time: `${hm.slice(0, 2)}:${hm.slice(2)}`,
     sortKey: `${y}${m}${d}T${hm}`,
     daySlug: `${y}/${m}/${d}`,
   };
