@@ -1,7 +1,7 @@
 import { glob } from "astro/loaders";
 import { z, defineCollection } from "astro:content";
 
-function contentId(collection: "blog" | "diary" | "twt") {
+function contentId(collection: "blog" | "twt") {
   return ({ entry }: { entry: string }) =>
     `${collection}/${entry.replace(/\.md$/, "")}`;
 }
@@ -20,18 +20,6 @@ const blog = defineCollection({
   }),
 });
 
-const diary = defineCollection({
-  loader: glob({
-    pattern: "**/[^_]*.md",
-    base: "./src/content/diary",
-    generateId: contentId("diary"),
-  }),
-  schema: z.object({
-    pubDate: z.string(),
-    asciiArt: z.string().optional(),
-  }),
-});
-
 const twt = defineCollection({
   loader: glob({
     pattern: "**/[^_]*.md",
@@ -45,4 +33,4 @@ const twt = defineCollection({
   }),
 });
 
-export const collections = { blog, diary, twt };
+export const collections = { blog, twt };

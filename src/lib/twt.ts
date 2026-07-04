@@ -65,12 +65,3 @@ export async function getTwtsByDate(date: string): Promise<TwtEntry[]> {
 export async function getMainTwts(): Promise<TwtEntry[]> {
   return (await getTwts()).filter((entry) => entry.data.tags?.includes("main"));
 }
-
-export function pubDateToSlug(pubDate: string): string {
-  return normalizeDate(pubDate).replace(/-/g, "/");
-}
-
-export async function getTwtDaySlugs(): Promise<string[]> {
-  const twts = await getTwts();
-  return [...new Set(twts.map((t) => parseTwtId(t.id).daySlug))];
-}

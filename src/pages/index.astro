@@ -1,15 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Twt from "../components/twt/Twt.astro";
-import BlogPostSummary from "../components/blog/BlogPostSummary.astro";
-import { getLatestBlogPostId } from "../lib/blog";
 import { getMainTwts } from "../lib/twt";
 
 const pageTitle = "Welcome!";
 
 const mainTwts = await getMainTwts();
 const [featuredTwt, ...olderMainTwts] = mainTwts;
-const latestPostId = await getLatestBlogPostId();
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -36,7 +33,6 @@ const latestPostId = await getLatestBlogPostId();
         </section>
       )
     }
-    <!-- {latestPostId && <BlogPostSummary id={latestPostId} />} -->
     {olderMainTwts.map((entry) => <Twt entry={entry} />)}
   </div>
 

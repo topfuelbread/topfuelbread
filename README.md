@@ -18,13 +18,12 @@ All contents are fictional.
 
 ### Static Content
 
-Blog and diary entries live under `src/content/`. Each entry’s content collection `id` is its path under that folder, without the file extension:
+Blog and twt entries live under `src/content/`. Each entry’s content collection `id` is its path under that folder, without the file extension:
 
 - Blog: `blog/YYYY/MM/DD` (e.g. `blog/2026/07/04` for `src/content/blog/2026/07/04.md`)
-- Diary: `diary/YYYY/MM/DD` (e.g. `diary/2026/07/04` for `src/content/diary/2026/07/04.md`)
 - Twt: `twt/YYYY/MM/DD/HHMM` (e.g. `twt/2026/07/04/1446` for `src/content/twt/2026/07/04/1446.md` — 2:46pm on that day)
 
-Public URLs use the same path: `/blog/2026/07/04/`, `/diary/2026/07/04/`, `/twt/2026/07/04/`.
+Public URLs use the same path: `/blog/2026/07/04/`, `/twt/2026/07/04/`.
 
 Twt frontmatter: `title`, optional `tags`, optional `asciiArt`. Datetime comes from the file path only — no `id` or `pubDate` fields.
 
@@ -64,3 +63,10 @@ https://docs.astro.build/en/guides/markdown-content/
 - Blog post pages embed that day's twts; home page shows `main`-tagged twts instead of diary
 - Navigation: added **TWT** link
 - Migrated 4 diary entries → twts with `main` tag; split ~20 blog time-sections into twts; blog topic posts retained
+
+### 2026-07-04 — Stray code cleanup
+
+- Removed superseded diary collection, components (`Diary.astro`, `DiaryEntry.astro`), and `src/lib/diary.ts`
+- Removed unused `BlogPostSummary.astro`, `src/lib/blog.ts`, and dead home-page imports
+- Removed page scaffolds (`_template.astro`) and empty route dirs (`pages/diary`, `pages/twts`, `pages/main`)
+- Trimmed unused `pubDateToSlug` / `getTwtDaySlugs` from `src/lib/twt.ts`; cleaned commented nav/layout markup
