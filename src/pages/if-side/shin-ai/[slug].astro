@@ -1,8 +1,8 @@
 ---
-import VisualNovelScene from "../../components/vn/VisualNovelScene.astro";
-import VisualNovelLayout from "../../layouts/VisualNovelLayout.astro";
-import { shinAi } from "../../lib/vn/novels/shin-ai/config";
-import { getScene, scenes } from "../../lib/vn/novels/shin-ai/scenes";
+import VisualNovelScene from "../../../components/vn/VisualNovelScene.astro";
+import VisualNovelLayout from "../../../layouts/VisualNovelLayout.astro";
+import { shinAi } from "../../../lib/vn/novels/shin-ai/config";
+import { getScene, scenes } from "../../../lib/vn/novels/shin-ai/scenes";
 
 export function getStaticPaths() {
   return Object.keys(scenes).map((slug) => ({ params: { slug } }));

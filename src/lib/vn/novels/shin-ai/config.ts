@@ -3,7 +3,7 @@ import type { NovelConfig } from "../../types";
 export const shinAi = {
   id: "shin-ai",
   name: "Shin-AI",
-  basePath: "/shin-ai/",
+  basePath: "/if-side/shin-ai/",
   flagIds: ["affection", "trust"],
 } satisfies NovelConfig;
 
