@@ -1,7 +1,7 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import AsciiContainer from "../../content/ascii/AsciiContainer.astro";
-import { pubDateToSlug } from "../../lib/twt";
+import { parseTwtId } from "../../lib/twt";
 
 type Props = {
   entry: CollectionEntry<"twt">;
@@ -10,7 +10,7 @@ type Props = {
 
 const { entry, linkToDay = true } = Astro.props;
 const { Content } = await render(entry);
-const daySlug = pubDateToSlug(entry.data.pubDate);
+const { daySlug, sortKey } = parseTwtId(entry.id);
 ---
 
 <div class="twt">
@@ -25,7 +25,7 @@ const daySlug = pubDateToSlug(entry.data.pubDate);
           )
         }
       </h3>
-      <time class="twt-id" datetime={entry.data.id}>{entry.data.id}</time>
+      <time class="twt-id" datetime={sortKey}>{sortKey}</time>
     </header>
     <div class="twt-content">
       <Content />

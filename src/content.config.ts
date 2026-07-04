@@ -40,8 +40,6 @@ const twt = defineCollection({
   }),
   schema: z.object({
     title: z.string(),
-    id: z.string(),
-    pubDate: z.string(),
     tags: z.array(z.string()).optional(),
     asciiArt: z.string().optional(),
   }),

@@ -1,0 +1,94 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Twt from "../../components/twt/Twt.astro";
+import TwtsList from "../../components/twt/TwtsList.astro";
+import { getMainTwts, getTwtDates, getTwtsByDate } from "../../lib/twt";
+
+const pageTitle = "TWT";
+const [topMainTwt] = await getMainTwts();
+const dates = await getTwtDates();
+const [latestDay] = dates;
+const latestDateTwts = latestDay
+  ? (await getTwtsByDate(latestDay.date)).filter(
+      (entry) => entry.id !== topMainTwt?.id,
+    )
+  : [];
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <div class="content-wrapper">
+    {topMainTwt && <Twt entry={topMainTwt} linkToDay={false} />}
+
+    {
+      latestDay && latestDateTwts.length > 0 && (
+        <section class="latest-date-twts">
+          <h4>{latestDay.date}</h4>
+          <TwtsList entries={latestDateTwts} linkToDay={false} />
+        </section>
+      )
+    }
+
+    <section class="twt-dates">
+      <h4>By date</h4>
+      <ul>
+        {
+          dates.map(({ date, daySlug }) => (
+            <li>
+              <a href={`/twt/${daySlug}/`}>{date}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .content-wrapper {
+    border: dotted 2px #79ffcc;
+    background-color: #cbfff631;
+    padding: 10px;
+    text-align: center;
+  }
+
+  h3,
+  h4 {
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.651);
+  }
+
+  .latest-date-twts {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: dotted 2px #79ffcc;
+    text-align: left;
+  }
+
+  .twt-dates {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: dotted 2px #79ffcc;
+    text-align: left;
+  }
+
+  .twt-dates ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .twt-dates li {
+    margin: 0.25rem 0;
+  }
+
+  .twt-dates a {
+    color: #ffe0f3;
+    font-family: monospace;
+    text-decoration: none;
+    text-shadow: 1px 1px 2px rgba(255, 0, 155, 0.651);
+  }
+
+  .twt-dates a:hover {
+    text-decoration: underline;
+  }
+</style>

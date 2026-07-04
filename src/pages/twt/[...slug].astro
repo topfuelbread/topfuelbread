@@ -1,11 +1,11 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TwtsForDay from "../../components/twt/TwtsForDay.astro";
-import { getTwts } from "../../lib/twt";
+import { getTwts, parseTwtId } from "../../lib/twt";
 
 export async function getStaticPaths() {
   const twts = await getTwts();
-  const dates = [...new Set(twts.map((t) => t.data.pubDate.slice(0, 10)))];
+  const dates = [...new Set(twts.map((t) => parseTwtId(t.id).date))];
 
   return dates.map((date) => ({
     params: { slug: date.replace(/-/g, "/") },
