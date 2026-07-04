@@ -111,6 +111,19 @@ const getTitleFromArt = (art: string) => {
   @media (max-width: 768px) {
     .gallery-grid {
       grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .gallery-item {
+      max-height: none;
+    }
+
+    .gallery-item :global(.ascii-panel) {
+      height: 300px;
+    }
+
+    .gallery-item :global(code) {
+      font-size: 8px !important;
     }
   }
 </style>
