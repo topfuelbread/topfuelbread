@@ -9,9 +9,8 @@ export async function getBlogPost(id: string): Promise<BlogPost | undefined> {
 
 export async function getLatestBlogPost(): Promise<BlogPost | undefined> {
   const posts = await getCollection("blog");
-  return posts.sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-  )[0];
+  const sorted = [...posts].sort((a, b) => b.id.localeCompare(a.id));
+  return sorted[0];
 }
 
 export async function getLatestBlogPostId(): Promise<string | undefined> {

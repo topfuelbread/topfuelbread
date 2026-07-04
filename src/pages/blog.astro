@@ -1,12 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { formatBlogPubDate } from "../lib/pubDate";
 
 const pageTitle = "Blog";
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = await getCollection("blog");
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -16,10 +13,8 @@ const posts = (await getCollection("blog")).sort(
       {
         posts.map((post: any) => (
           <li>
-            <a href={`/blog/${post.id}/`}>
-              <div class="pub-date">
-                {formatBlogPubDate(post.data.pubDate, post.data.timezone)}
-              </div>
+            <a href={`/${post.id}/`}>
+              <div class="pub-date">{post.data.pubDate}</div>
 
               {post.data.title}
             </a>

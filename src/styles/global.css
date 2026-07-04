@@ -1,13 +1,13 @@
 /* Minimal essential styles for all layouts */
 @import url(https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css);
-@import 'blur-container.css';
+@import "blur-container.css";
 
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: "Fira Code", Monaco, Consolas, "Ubuntu Mono", monospace;
+  font-family: "Fira Code", "Nanum Gothic", monospace;
   margin: 0 auto;
   width: 1200px;
   max-width: 100vw;

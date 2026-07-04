@@ -7,7 +7,9 @@ import { getDiaryEntries } from "../lib/diary";
 
 const pageTitle = " Welcome!";
 
-const diaryEntries = await getDiaryEntries();
+const diaryEntries = (await getDiaryEntries()).sort((a, b) =>
+  b.id.localeCompare(a.id),
+);
 const [firstDiary, ...restDiary] = diaryEntries;
 const latestPostId = await getLatestBlogPostId();
 ---
@@ -22,26 +24,37 @@ const latestPostId = await getLatestBlogPostId();
       <a href="/if/">
         <img
           src="https://blob.gifcities.org/gifcities/V54WUS2GWCSI647WCDLP5SF6DQZ75RZA.gif"
-        /></a
+        />
+        <p>^^위 웰컴을 클릭하시면 다른 세계로 데려가 준다네요^^</p>
+        </a
       >
-      <p>위 웰컴을 클릭하시면 다른 세계로 데려가 준다네요</p>
     </div>
   </div>
 
   <div class="diary">
+    <div class="diary-entry">
+      {firstDiary && <DiaryEntry entry={firstDiary} />}
+    </div>
     {latestPostId && <BlogPostSummary id={latestPostId} />}
-    {firstDiary && <DiaryEntry entry={firstDiary} />}
     {restDiary.map((entry) => <DiaryEntry entry={entry} />)}
   </div>
 
   <style>
-    .diary {
-      padding-bottom: 200px;
+    .diary-entry {
+      border: 1px dotted pink;
+      padding: 10px;
+      margin-bottom: 20px;
+      background-color: rgba(255, 255, 255, 0.3);
+      color:black;
+      font-family: "Nanum Gothic";
     }
+
     .intro-header {
       text-align: center;
       margin-bottom: 15px;
       color: white;
+      boreder-bottom: 1px solid white;
+      padding-bottom: 10px;
     }
 
     h1 {
