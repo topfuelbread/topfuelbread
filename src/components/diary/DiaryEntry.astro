@@ -1,84 +1,85 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import AsciiContainer from "../../content/ascii/AsciiContainer.astro";
-import { formatTimeLabel, getPubDateParts } from "../../lib/pubDate";
 
-interface Props {
+type Props = {
   entry: CollectionEntry<"diary">;
   linkToPage?: boolean;
-}
+};
 
 const { entry, linkToPage = true } = Astro.props;
 const { Content } = await render(entry);
-
-const {
-  isoLocal,
-  timePart,
-  slashDate: dateLabel,
-} = getPubDateParts(entry.data.pubDate);
-const timeLabel = formatTimeLabel(timePart, entry.data.timezone);
 ---
 
-<article class="message-box diary-entry">
-  <header class="diary-entry-header">
-    <h3 class="diary-entry-date">
-      {linkToPage ? <a href={`/diary/${entry.id}/`}>{dateLabel}</a> : dateLabel}
+<div class="diary-entry">
+<article class="entry">
+  <header class="entry-header">
+    <h3 class="entry-date">
+      {linkToPage ? <a href={`/${entry.id}/`}>{entry.data.pubDate}</a> : entry.data.pubDate}
     </h3>
-    <time datetime={isoLocal} class="diary-entry-time">
-      {timeLabel}
-    </time>
   </header>
-  <div class="diary-entry-content">
+  <div class="entry-content">
     <Content />
   </div>
   {entry.data.asciiArt && <AsciiContainer name={entry.data.asciiArt} />}
 </article>
+</div>
 
 <style>
-  .diary-entry {
+    .diary-entry {
+      border: 1px dotted pink;
+      padding: 10px;
+      margin-bottom: 20px;
+      background-color: rgba(255, 255, 255, 0.3);
+      color:black;
+    }
+
+  .entry {
     margin-bottom: 1.25rem;
   }
 
-  .diary-entry-header {
+  .entry-header {
     margin-bottom: 0.5rem;
   }
 
-  .diary-entry-date {
+  .entry-date {
     margin: 0;
-    color: red;
-    text-shadow:
-      darkblue 1px 1px 2px,
-      darkblue -1px -1px 2px,
-      darkblue -1px 1px 2px,
-      darkblue 1px -1px 2px;
+    color: white;
+    text-shadow: 5px 5px 5px pink;
+    font-size: 20px;
+    text-decoration: underline;
+    text-decoration-color: pink;
+    text-decoration-thickness: 2px;
+    text-decoration-style: dotted;
+    text-decoration-offset: 2px;
   }
 
-  .diary-entry-date a {
+  .entry-date a {
     color: inherit;
     text-decoration: none;
   }
 
-  .diary-entry-date a:hover {
+  .entry-date a:hover {
     text-decoration: underline;
   }
-
-  .diary-entry-time {
-    display: block;
-    font-size: 0.85rem;
-    color: rgb(255, 255, 255);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.651);
+  .entry-content {
+    text-align: center;
+    color: black;
+    text-shadow: 5px 5px 5px rgb(0, 255, 255);
+    border-bottom: 1px solid purple;
   }
 
-  .diary-entry-content :global(h1) {
+  .entry-content :global(h1) {
     text-align: center;
     color: yellow;
+    border-bottom: 1px solid yellow;
   }
 
-  .diary-entry-content :global(h4) {
+  .entry-content :global(h4) {
     margin-top: 0;
   }
 
-  .diary-entry-content :global(p) {
+  .entry-content :global(p) {
     margin: 0.5rem 0;
   }
 </style>
