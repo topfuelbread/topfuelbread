@@ -69,6 +69,12 @@ https://docs.astro.build/en/guides/markdown-content/
 
 ## ChangeLog 
 
+### 2026-07-05 — ASCII Art Generator (dev only)
+
+- Added `/if/ascii-art-generator/` with text banner (figlet) and image-to-ASCII modes
+- Dev-only: nav link and page use `import.meta.env.DEV`; production redirects to 404
+- New deps: `figlet`; island at `src/components/islands/AsciiArtGenerator.jsx`
+
 ### 2026-07-04 — TWT single datetime
 
 - Datetime is now derived from file path (`twt/YYYY/MM/DD/HHMM`) via `parseTwtId()` in `src/lib/twt.ts`

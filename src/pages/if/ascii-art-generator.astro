@@ -1,0 +1,189 @@
+---
+import AsciiArtGenerator from "../../components/islands/AsciiArtGenerator.jsx";
+import VnLayout from "../../layouts/VNLayout.astro";
+
+export const prerender = import.meta.env.DEV;
+
+if (import.meta.env.PROD) {
+  return Astro.redirect("/404");
+}
+---
+
+<VnLayout pageTitle="ASCII Art Generator (dev)">
+  <AsciiArtGenerator client:load />
+</VnLayout>
+
+<style>
+  :global(.ascii-gen) {
+    font-family: "JetBrains Mono", monospace;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  :global(.ascii-gen__hero) {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  :global(.ascii-gen__eyebrow) {
+    color: #ff7bff;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+  }
+
+  :global(.ascii-gen h1) {
+    color: #00ffff;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin: 0 0 0.75rem;
+    text-shadow: 0 0 12px rgba(0, 255, 255, 0.7);
+  }
+
+  :global(.ascii-gen__subtitle) {
+    color: #c8f7ff;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  :global(.ascii-gen__panel) {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
+    border: 3px solid #00ffff;
+    box-shadow:
+      0 0 20px rgba(0, 255, 255, 0.5),
+      inset 0 0 20px rgba(0, 255, 255, 0.1);
+  }
+
+  :global(.ascii-gen__toolbar) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: end;
+    padding: 1rem;
+    border-bottom: 2px solid rgba(0, 255, 255, 0.25);
+  }
+
+  :global(.ascii-gen__field) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 120px;
+  }
+
+  :global(.ascii-gen__field--grow) {
+    flex: 1 1 220px;
+  }
+
+  :global(.ascii-gen__field span),
+  :global(.ascii-gen__check span) {
+    color: #00ffff;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  :global(.ascii-gen__field input),
+  :global(.ascii-gen__field select) {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(0, 255, 255, 0.45);
+    color: #e8e8e8;
+    font: inherit;
+    padding: 0.55rem 0.65rem;
+  }
+
+  :global(.ascii-gen__check) {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    min-height: 2.4rem;
+  }
+
+  :global(.ascii-gen__btn) {
+    background: rgba(0, 255, 255, 0.08);
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 0.55rem 0.9rem;
+    text-transform: uppercase;
+  }
+
+  :global(.ascii-gen__btn:hover:not(:disabled)) {
+    background: rgba(255, 0, 255, 0.15);
+    border-color: #ff00ff;
+    color: #ff00ff;
+  }
+
+  :global(.ascii-gen__btn:disabled) {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  :global(.ascii-gen__btn--primary) {
+    margin-top: 0.75rem;
+  }
+
+  :global(.ascii-gen__drop) {
+    border-bottom: 2px solid rgba(0, 255, 255, 0.25);
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  :global(.ascii-gen__drop-title) {
+    color: #00ffff;
+    font-weight: 700;
+    margin: 0 0 0.35rem;
+  }
+
+  :global(.ascii-gen__drop-hint) {
+    color: #9adde6;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  :global(.ascii-gen__error) {
+    color: #ff7b7b;
+    margin: 0.75rem 0 0;
+  }
+
+  :global(.ascii-gen__result-wrap) {
+    padding: 1rem;
+  }
+
+  :global(.ascii-gen__result-head) {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.ascii-gen__result-head > span) {
+    color: #00ffff;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  :global(.ascii-gen__actions) {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  :global(.ascii-gen__result) {
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    color: #d8fff9;
+    font-size: 0.72rem;
+    line-height: 1.15;
+    margin: 0;
+    max-height: 420px;
+    min-height: 220px;
+    overflow: auto;
+    padding: 1rem;
+    white-space: pre;
+    word-break: normal;
+  }
+</style>
