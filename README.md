@@ -14,6 +14,8 @@ All contents are fictional.
 
 - [ ] update blog to be sorted by latest md
 - [ ] make blog or twt with tag "draft" to be not visible on the link
+
+
 # Designs
 
 ### Static Content
@@ -49,7 +51,23 @@ Twt frontmatter: `title`, optional `tags`, optional `asciiArt`. Datetime comes f
 
 https://docs.astro.build/en/guides/markdown-content/
 
+
+
+
+
+
+
+
+
+
+
+
+
 # AI Outputs
+
+## Short timeline of feature changes and datetime, for general users of the page.
+
+## ChangeLog 
 
 ### 2026-07-04 — TWT single datetime
 
