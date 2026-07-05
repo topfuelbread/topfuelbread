@@ -3,19 +3,24 @@ import { FIGLET_FONTS, renderFiglet } from "../../lib/ascii/figletFonts";
 import {
   imageToAscii,
   loadImageFromFile,
+  normalizeAsciiOutput,
+  plainToCodeInner,
+  wrapCodeBlock,
 } from "../../lib/ascii/imageToAscii";
 
 const WIDTHS = [40, 60, 80, 100, 120];
+const EMPTY_OUTPUT = { plain: "", html: "" };
 
 export default function AsciiArtGenerator() {
-  const [mode, setMode] = useState("text");
+  const [mode, setMode] = useState("image");
   const [text, setText] = useState("topfuelbread");
   const [font, setFont] = useState("Standard");
-  const [width, setWidth] = useState(80);
+  const [width, setWidth] = useState(100);
+  const [color, setColor] = useState(true);
   const [invert, setInvert] = useState(false);
   const [style, setStyle] = useState("shaded");
-  const [output, setOutput] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [output, setOutput] = useState(EMPTY_OUTPUT);
+  const [copied, setCopied] = useState("");
   const [error, setError] = useState("");
   const [loadedImage, setLoadedImage] = useState(null);
   const fileRef = useRef(null);
@@ -25,9 +30,15 @@ export default function AsciiArtGenerator() {
     [text, font],
   );
 
+  const codeInner = useMemo(() => {
+    if (!output.plain) return "";
+    if (mode === "image" && color) return output.html;
+    return plainToCodeInner(output.plain);
+  }, [mode, color, output.plain, output.html]);
+
   useEffect(() => {
     if (mode === "text") {
-      setOutput(textOutput);
+      setOutput({ plain: textOutput, html: "" });
       setError("");
     }
   }, [mode, textOutput]);
@@ -35,13 +46,16 @@ export default function AsciiArtGenerator() {
   useEffect(() => {
     if (mode !== "image" || !loadedImage) return;
     setOutput(
-      imageToAscii(loadedImage, {
-        width,
-        invert,
-        style,
-      }),
+      normalizeAsciiOutput(
+        imageToAscii(loadedImage, {
+          width,
+          invert,
+          style,
+          color,
+        }),
+      ),
     );
-  }, [mode, loadedImage, width, invert, style]);
+  }, [mode, loadedImage, width, invert, style, color]);
 
   async function handleFile(file) {
     setError("");
@@ -50,7 +64,7 @@ export default function AsciiArtGenerator() {
       setLoadedImage(image);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not load image");
-      setOutput("");
+      setOutput(EMPTY_OUTPUT);
     }
   }
 
@@ -60,16 +74,23 @@ export default function AsciiArtGenerator() {
     if (file) void handleFile(file);
   }
 
-  async function copyOutput() {
-    if (!output) return;
-    await navigator.clipboard.writeText(output);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1500);
+  async function copyPlain() {
+    if (!output.plain) return;
+    await navigator.clipboard.writeText(output.plain);
+    setCopied("plain");
+    window.setTimeout(() => setCopied(""), 1500);
+  }
+
+  async function copyCodeBlock() {
+    if (!codeInner) return;
+    await navigator.clipboard.writeText(wrapCodeBlock(codeInner));
+    setCopied("code");
+    window.setTimeout(() => setCopied(""), 1500);
   }
 
   function downloadTxt() {
-    if (!output) return;
-    const blob = new Blob([output], { type: "text/plain;charset=utf-8" });
+    if (!output.plain) return;
+    const blob = new Blob([output.plain], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -80,11 +101,14 @@ export default function AsciiArtGenerator() {
 
   function clearAll() {
     setText("");
-    setOutput("");
+    setOutput(EMPTY_OUTPUT);
     setError("");
     setLoadedImage(null);
     if (fileRef.current) fileRef.current.value = "";
   }
+
+  const hasOutput = Boolean(output.plain);
+  const showColoredPreview = mode === "image" && color && output.html;
 
   return (
     <div class="ascii-gen">
@@ -171,6 +195,14 @@ export default function AsciiArtGenerator() {
               <label class="ascii-gen__check">
                 <input
                   type="checkbox"
+                  checked={color}
+                  onChange={(event) => setColor(event.currentTarget.checked)}
+                />
+                <span>Color</span>
+              </label>
+              <label class="ascii-gen__check">
+                <input
+                  type="checkbox"
                   checked={invert}
                   onChange={(event) => setInvert(event.currentTarget.checked)}
                 />
@@ -222,24 +254,39 @@ export default function AsciiArtGenerator() {
               <button
                 type="button"
                 class="ascii-gen__btn"
-                disabled={!output}
-                onClick={() => void copyOutput()}
+                disabled={!hasOutput}
+                onClick={() => void copyPlain()}
               >
-                {copied ? "Copied" : "Copy"}
+                {copied === "plain" ? "Copied" : "Copy"}
               </button>
               <button
                 type="button"
                 class="ascii-gen__btn"
-                disabled={!output}
+                disabled={!hasOutput}
+                onClick={() => void copyCodeBlock()}
+              >
+                {copied === "code" ? "Copied" : "Copy code block"}
+              </button>
+              <button
+                type="button"
+                class="ascii-gen__btn"
+                disabled={!hasOutput}
                 onClick={downloadTxt}
               >
                 .txt
               </button>
             </div>
           </div>
-          <pre class="ascii-gen__result" aria-live="polite">
-            {output || "ASCII output appears here. Type above or drop an image."}
-          </pre>
+          {showColoredPreview ? (
+            <div class="ascii-gen__result ascii-gen__result--html" aria-live="polite">
+              <code dangerouslySetInnerHTML={{ __html: output.html }} />
+            </div>
+          ) : (
+            <pre class="ascii-gen__result" aria-live="polite">
+              {output.plain ||
+                "ASCII output appears here. Type above or drop an image."}
+            </pre>
+          )}
         </div>
       </div>
     </div>
