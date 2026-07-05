@@ -12,8 +12,8 @@ All contents are fictional.
 
 # TODO List
 
-(problem resolved — see AI Outputs 2026-07-04 TWT single datetime)
-
+- [ ] update blog to be sorted by latest md
+- [ ] make blog or twt with tag "draft" to be not visible on the link
 # Designs
 
 ### Static Content
@@ -41,7 +41,9 @@ Twt frontmatter: `title`, optional `tags`, optional `asciiArt`. Datetime comes f
 
 ## Useful References
 
-[ASCII Art Generator](https://coddy.tech/tools/ascii-art-generator)
+### ASCII Art Generators
+- static: https://coddy.tech/tools/ascii-art-generator
+- fancy: https://www.asciii.com/
 
 ### Astro Links
 
