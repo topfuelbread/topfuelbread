@@ -1,53 +1,28 @@
 ---
-import VnLayout from "../../layouts/VNLayout.astro";
 import AsciiContainer from "../../content/ascii/AsciiContainer.astro";
+import type { ArtPiece } from "../../lib/ascii/listArt";
 
-const pageTitle = "ASCII Art Gallery";
+interface Props {
+  pieces: ArtPiece[];
+}
 
-// Get all ASCII art files
-const artModules = import.meta.glob<string>(
-  "../../content/ascii/art/yytd/*.html",
-  {
-    query: "?raw",
-    import: "default",
-    eager: true,
-  },
-);
-
-// Extract art names from paths (remove .html extension and ./art/ prefix)
-const artPieces = Object.keys(artModules)
-  .map((path) =>
-    path.replace("../../content/ascii/art/", "").replace(".html", ""),
-  )
-  .sort();
-
-// Helper to convert filename to fancy title
-const getTitleFromArt = (art: string) => {
-  const name = art.split("/").pop() ?? art;
-  return name;
-  // .split("_")
-  // .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  // .join(" ");
-};
+const { pieces } = Astro.props;
 ---
 
-<VnLayout pageTitle={pageTitle}>
-  <div class="gallery-container">
-    <div class="gallery-grid">
-      {
-        artPieces.map((art) => (
-          <div class="gallery-item">
-            <div class="item-title">{getTitleFromArt(art)}</div>
-            <AsciiContainer name={art} />
-          </div>
-        ))
-      }
-    </div>
+<div class="gallery-container">
+  <div class="gallery-grid">
+    {
+      pieces.map((art) => (
+        <div class="gallery-item">
+          <div class="item-title">{art.title}</div>
+          <AsciiContainer name={art.name} />
+        </div>
+      ))
+    }
   </div>
-</VnLayout>
+</div>
 
 <style>
-  /* VN layout centers content — stretch gallery to viewport on mobile */
   :global(.vn-game-content) {
     justify-content: flex-start;
     align-items: stretch;
@@ -65,7 +40,7 @@ const getTitleFromArt = (art: string) => {
 
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
     width: 100%;
     min-width: 0;
@@ -76,7 +51,6 @@ const getTitleFromArt = (art: string) => {
     flex-direction: column;
     gap: 0.75rem;
     min-width: 0;
-    max-height: 700px;
   }
 
   .item-title {
@@ -93,14 +67,15 @@ const getTitleFromArt = (art: string) => {
     margin-bottom: 0.25rem;
   }
 
-  /* Override AsciiContainer to be fixed size */
   .gallery-item :global(.ascii-panel) {
     width: 100%;
     min-width: 0;
-    height: 350px;
+    height: 550px;
+    min-height: 550px;
+    max-height: 550px;
+    flex: none;
     display: flex;
     flex-direction: column;
-    flex: 1;
   }
 
   .gallery-item :global(.ascii-viewport) {
@@ -115,10 +90,14 @@ const getTitleFromArt = (art: string) => {
     font-size: 9px !important;
   }
 
-  @media (max-width: 1200px) {
-    .gallery-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .gallery-item :global(.ascii-viewport--svg) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .gallery-item :global(.ascii-viewport--svg svg) {
+    flex-shrink: 0;
   }
 
   @media (max-width: 768px) {
@@ -127,12 +106,10 @@ const getTitleFromArt = (art: string) => {
       gap: 2rem;
     }
 
-    .gallery-item {
-      max-height: none;
-    }
-
     .gallery-item :global(.ascii-panel) {
-      height: 300px;
+      height: 420px;
+      min-height: 420px;
+      max-height: 420px;
     }
 
     .gallery-item :global(code) {

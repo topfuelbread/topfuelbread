@@ -1,0 +1,26 @@
+---
+import VnLayout from "../../../layouts/VNLayout.astro";
+import AsciiGallery from "../../../components/ascii/AsciiGallery.astro";
+import AsciiGalleryNav from "../../../components/ascii/AsciiGalleryNav.astro";
+import { listAsciiArt, listAsciiCollections } from "../../../lib/ascii/listArt";
+
+export function getStaticPaths() {
+  return listAsciiCollections().map((collection) => ({
+    params: { collection },
+  }));
+}
+
+const { collection } = Astro.params;
+
+if (!collection || !listAsciiCollections().includes(collection)) {
+  return Astro.redirect("/404");
+}
+
+const artPieces = listAsciiArt(collection);
+const pageTitle = `ASCII Art Gallery — ${collection}`;
+---
+
+<VnLayout pageTitle={pageTitle}>
+  <AsciiGalleryNav active={collection} />
+  <AsciiGallery pieces={artPieces} />
+</VnLayout>

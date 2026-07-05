@@ -1,0 +1,13 @@
+---
+import VnLayout from "../../../layouts/VNLayout.astro";
+import AsciiGallery from "../../../components/ascii/AsciiGallery.astro";
+import AsciiGalleryNav from "../../../components/ascii/AsciiGalleryNav.astro";
+import { listAllAsciiArt } from "../../../lib/ascii/listArt";
+
+const artPieces = listAllAsciiArt();
+---
+
+<VnLayout pageTitle="ASCII Art Gallery">
+  <AsciiGalleryNav />
+  <AsciiGallery pieces={artPieces} />
+</VnLayout>
