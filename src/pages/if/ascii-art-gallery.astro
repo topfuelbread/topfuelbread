@@ -47,25 +47,35 @@ const getTitleFromArt = (art: string) => {
 </VnLayout>
 
 <style>
+  /* VN layout centers content — stretch gallery to viewport on mobile */
+  :global(.vn-game-content) {
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
   .gallery-container {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     padding: 1rem 0;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem;
     width: 100%;
+    min-width: 0;
   }
 
   .gallery-item {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    height: 100%;
+    min-width: 0;
     max-height: 700px;
   }
 
@@ -86,6 +96,7 @@ const getTitleFromArt = (art: string) => {
   /* Override AsciiContainer to be fixed size */
   .gallery-item :global(.ascii-panel) {
     width: 100%;
+    min-width: 0;
     height: 350px;
     display: flex;
     flex-direction: column;
@@ -94,8 +105,10 @@ const getTitleFromArt = (art: string) => {
 
   .gallery-item :global(.ascii-viewport) {
     flex: 1;
+    min-height: 0;
     overflow: auto;
     max-height: 100%;
+    -webkit-overflow-scrolling: touch;
   }
 
   .gallery-item :global(code) {
@@ -104,13 +117,13 @@ const getTitleFromArt = (art: string) => {
 
   @media (max-width: 1200px) {
     .gallery-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 768px) {
     .gallery-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 2rem;
     }
 
