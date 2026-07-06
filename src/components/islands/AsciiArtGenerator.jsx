@@ -3,6 +3,7 @@ import { CHARACTER_SET_OPTIONS } from "../../lib/ascii/characterSets";
 import {
   imageToAscii,
   loadImageFromFile,
+  loadImageFromUrl,
   normalizeAsciiOutput,
   plainToCodeInner,
   wrapCodeBlock,
@@ -26,6 +27,7 @@ export default function AsciiArtGenerator() {
   const [output, setOutput] = useState(EMPTY_OUTPUT);
   const [copied, setCopied] = useState("");
   const [error, setError] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [loadedImage, setLoadedImage] = useState(null);
   const fileRef = useRef(null);
 
@@ -65,6 +67,22 @@ export default function AsciiArtGenerator() {
     setError("");
     try {
       const image = await loadImageFromFile(file);
+      setImageUrl("");
+      setLoadedImage(image);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not load image");
+      setOutput(EMPTY_OUTPUT);
+    }
+  }
+
+  async function handleUrl() {
+    const trimmed = imageUrl.trim();
+    if (!trimmed) return;
+
+    setError("");
+    try {
+      const image = await loadImageFromUrl(trimmed);
+      if (fileRef.current) fileRef.current.value = "";
       setLoadedImage(image);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not load image");
@@ -106,6 +124,7 @@ export default function AsciiArtGenerator() {
   function clearAll() {
     setOutput(EMPTY_OUTPUT);
     setError("");
+    setImageUrl("");
     setLoadedImage(null);
     if (fileRef.current) fileRef.current.value = "";
   }
@@ -148,7 +167,8 @@ export default function AsciiArtGenerator() {
           />
           <p class="ascii-gen__drop-title">Drop an image or click to browse</p>
           <p class="ascii-gen__drop-hint">
-            PNG, JPG, SVG. Images never leave your browser.
+            PNG, JPG, SVG. Drop an image, choose a file, or paste an image URL.
+            Images never leave your browser.
           </p>
           <button
             type="button"
@@ -157,6 +177,27 @@ export default function AsciiArtGenerator() {
           >
             Choose image
           </button>
+          <p class="ascii-gen__drop-or">or</p>
+          <div class="ascii-gen__drop-url">
+            <input
+              type="url"
+              class="ascii-gen__drop-url-input"
+              placeholder="https://example.com/image.jpg"
+              value={imageUrl}
+              onInput={(event) => setImageUrl(event.currentTarget.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") void handleUrl();
+              }}
+            />
+            <button
+              type="button"
+              class="ascii-gen__btn"
+              disabled={!imageUrl.trim()}
+              onClick={() => void handleUrl()}
+            >
+              Load
+            </button>
+          </div>
           {error && <p class="ascii-gen__error">{error}</p>}
         </div>
 

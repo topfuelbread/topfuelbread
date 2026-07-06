@@ -397,3 +397,31 @@ export function loadImageFromFile(file: File): Promise<HTMLImageElement> {
     image.src = url;
   });
 }
+
+export async function loadImageFromUrl(url: string): Promise<HTMLImageElement> {
+  let parsed: URL;
+  try {
+    parsed = new URL(url.trim());
+  } catch {
+    throw new Error("Invalid URL");
+  }
+  if (!["http:", "https:"].includes(parsed.protocol)) {
+    throw new Error("URL must use http or https");
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(parsed.href);
+  } catch {
+    throw new Error("Could not load image from URL (CORS or network error)");
+  }
+
+  if (!response.ok) throw new Error("Could not fetch image");
+
+  const blob = await response.blob();
+  if (!blob.type.startsWith("image/")) {
+    throw new Error("URL does not point to an image");
+  }
+
+  return loadImageFromFile(new File([blob], "image", { type: blob.type }));
+}
