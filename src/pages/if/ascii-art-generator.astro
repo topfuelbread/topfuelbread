@@ -79,6 +79,19 @@ if (import.meta.env.PROD) {
     min-width: 160px;
   }
 
+  :global(.ascii-gen__sliders) {
+    align-items: end;
+    display: flex;
+    flex: 1 1 100%;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  :global(.ascii-gen__sliders .ascii-gen__field--slider) {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
   :global(.ascii-gen__field--slider input[type="range"]) {
     accent-color: #00ffff;
     padding: 0;
