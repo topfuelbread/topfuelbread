@@ -14,7 +14,6 @@
     "@astrojs/preact": "^4.1.0",
     "@astrojs/rss": "^4.0.12",
     "astro": "^5.13.5",
-    "figlet": "^1.11.0",
     "preact": "^10.27.1",
     "typescript": "^5.9.3"
   },
