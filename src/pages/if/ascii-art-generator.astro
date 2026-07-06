@@ -1,15 +1,9 @@
 ---
 import AsciiArtGenerator from "../../components/islands/AsciiArtGenerator.jsx";
 import VnLayout from "../../layouts/VNLayout.astro";
-
-export const prerender = import.meta.env.DEV;
-
-if (import.meta.env.PROD) {
-  return Astro.redirect("/404");
-}
 ---
 
-<VnLayout pageTitle="ASCII Art Generator (dev)">
+<VnLayout pageTitle="ASCII Art Generator">
   <AsciiArtGenerator client:load />
 </VnLayout>
 
