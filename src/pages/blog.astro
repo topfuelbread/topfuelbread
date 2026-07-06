@@ -1,9 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { formatBlogDate, sortBlogPostsByDateDesc } from "../lib/blog.ts";
 
 const pageTitle = "Blog";
-const posts = await getCollection("blog");
+const posts = sortBlogPostsByDateDesc(await getCollection("blog"));
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -14,7 +15,7 @@ const posts = await getCollection("blog");
         posts.map((post: any) => (
           <li>
             <a href={`/${post.id}/`}>
-              <div class="pub-date">{post.data.pubDate}</div>
+              <div class="pub-date">{formatBlogDate(post.data.pubDate)}</div>
 
               {post.data.title}
             </a>

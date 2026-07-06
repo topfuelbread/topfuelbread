@@ -1,5 +1,5 @@
 ---
-pubDate: "2026-07-04"
+pubDate: "2026-07-04T00:00:00-04:00"
 title: "갠홈 만든 방법"
 tags: ["blog", "tutorial", "2026-07"]
 id: "blog-01"

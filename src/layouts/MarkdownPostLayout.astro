@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import { formatBlogDate } from "../lib/blog.ts";
 
 const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
   <div class="content-wrapper">
-    <div class="date">Published on {frontmatter.pubDate}</div>
+    <div class="date">Published on {formatBlogDate(frontmatter.pubDate)}</div>
     <div class="tags">
       {
         frontmatter.tags.map((tag: string) => (

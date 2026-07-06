@@ -1,6 +1,7 @@
 ---
 import TwtsList from "./TwtsList.astro";
-import { getTwtsByDate } from "../../lib/twt";
+import Twt from "./Twt.astro";
+import { getTwtsForDayDisplay } from "../../lib/twt";
 
 type Props = {
   date: string;
@@ -8,13 +9,16 @@ type Props = {
 };
 
 const { date, linkToDay = false } = Astro.props;
-const entries = await getTwtsByDate(date);
+const { mainTwt, twts } = await getTwtsForDayDisplay(date);
 ---
 
 {
-  entries.length > 0 && (
+  (mainTwt || twts.length > 0) && (
     <section class="twts-for-day">
-      <TwtsList entries={entries} linkToDay={linkToDay} />
+      {mainTwt && (
+        <Twt entry={mainTwt} linkToDay={linkToDay} featured />
+      )}
+      <TwtsList entries={twts} linkToDay={linkToDay} />
     </section>
   )
 }

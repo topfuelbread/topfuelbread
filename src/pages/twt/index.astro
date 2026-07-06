@@ -1,31 +1,15 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Twt from "../../components/twt/Twt.astro";
-import TwtsList from "../../components/twt/TwtsList.astro";
-import { getMainTwts, getTwtDates, getTwtsByDate } from "../../lib/twt";
+import LatestDayTwts from "../../components/twt/LatestDayTwts.astro";
+import { getTwtDates } from "../../lib/twt";
 
 const pageTitle = "TWT";
-const [topMainTwt] = await getMainTwts();
 const dates = await getTwtDates();
-const [latestDay] = dates;
-const latestDateTwts = latestDay
-  ? (await getTwtsByDate(latestDay.date)).filter(
-      (entry) => entry.id !== topMainTwt?.id,
-    )
-  : [];
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <div class="content-wrapper">
-    {
-      latestDay && latestDateTwts.length > 0 && (
-        <section class="latest-date-twts">
-          <h3>{latestDay.date}</h3>
-          {topMainTwt && <Twt entry={topMainTwt} linkToDay={false} featured />}
-          <TwtsList entries={latestDateTwts} linkToDay={false} />
-        </section>
-      )
-    }
+    <LatestDayTwts linkToDay={false} />
 
     <section class="twt-dates">
       <h4>More entries by dates</h4>

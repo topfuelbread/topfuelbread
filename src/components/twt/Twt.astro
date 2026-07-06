@@ -11,7 +11,8 @@ type Props = {
 
 const { entry, linkToDay = true, featured = false } = Astro.props;
 const { Content } = await render(entry);
-const { daySlug, time } = parseTwtId(entry.id);
+const { date, daySlug, time } = parseTwtId(entry.id);
+const dateTimeLabel = `${date} ${time}`;
 ---
 
 <div class:list={["twt", { "twt--featured": featured }]}>
@@ -20,7 +21,11 @@ const { daySlug, time } = parseTwtId(entry.id);
       <h3 class="twt-title">
         {featured && <span class="twt-main-label">[main]</span>}
 
-        {linkToDay ? <a href={`/twt/${daySlug}/`}>{time}</a> : time}
+        {linkToDay ? (
+          <a href={`/twt/${daySlug}/`}>{dateTimeLabel}</a>
+        ) : (
+          dateTimeLabel
+        )}
       </h3>
     </header>
     <div class="twt-content">

@@ -1,12 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Twt from "../components/twt/Twt.astro";
-import { getMainTwts } from "../lib/twt";
+import LatestDayTwts from "../components/twt/LatestDayTwts.astro";
+import { getLatestMainTwt } from "../lib/twt";
 
 const pageTitle = "Welcome!";
-
-const mainTwts = await getMainTwts();
-const [featuredTwt, ...olderMainTwts] = mainTwts;
+const latestMainTwt = await getLatestMainTwt();
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -26,14 +25,14 @@ const [featuredTwt, ...olderMainTwts] = mainTwts;
 
   <div class="content-wrapper">
     {
-      featuredTwt && (
+      latestMainTwt && (
         <section class="featured-twt">
           <p class="featured-twt__label">New!</p>
-          <Twt entry={featuredTwt} featured />
+          <Twt entry={latestMainTwt} featured />
         </section>
       )
     }
-    {olderMainTwts.map((entry) => <Twt entry={entry} />)}
+    <LatestDayTwts excludeEntryId={latestMainTwt?.id} />
   </div>
 
   <style>

@@ -52,6 +52,22 @@ export async function getTwtsByDate(date: string): Promise<TwtEntry[]> {
     .sort(sortByTwtIdDesc);
 }
 
+export async function getTwtsForDayDisplay(date: string): Promise<{
+  mainTwt?: TwtEntry;
+  twts: TwtEntry[];
+}> {
+  const entries = await getTwtsByDate(date);
+  const mainTwt = entries.find((entry) => entry.data.tags?.includes("main"));
+  const twts = entries.filter((entry) => entry.id !== mainTwt?.id);
+
+  return { mainTwt, twts };
+}
+
 export async function getMainTwts(): Promise<TwtEntry[]> {
   return (await getTwts()).filter((entry) => entry.data.tags?.includes("main"));
+}
+
+export async function getLatestMainTwt(): Promise<TwtEntry | undefined> {
+  const [latestMainTwt] = await getMainTwts();
+  return latestMainTwt;
 }

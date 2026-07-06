@@ -1,6 +1,6 @@
 ---
 title: "토토노"
-pubDate: "2026-07-05T1849"
+pubDate: "2026-07-05T18:49:00-04:00"
 tags: ["blog", "review", "game", "draft"]
 ---
 
