@@ -1,8 +1,13 @@
 export type AsciiStyle = "shaded" | "edges";
 
-const RAMPS: Record<AsciiStyle, string> = {
+const PLAIN_RAMPS: Record<AsciiStyle, string> = {
   shaded: " $@#*+=-:.`. ",
   edges: " .:-=+*#%@",
+};
+
+const COLOR_RAMPS: Record<AsciiStyle, string> = {
+  shaded: "`.:-=+*#@%&",
+  edges: "`.:-=+*#%@",
 };
 
 export interface ImageToAsciiOptions {
@@ -17,14 +22,41 @@ export interface ImageToAsciiResult {
   html: string;
 }
 
+function luminance(r: number, g: number, b: number): number {
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+}
+
+function percentileStretchBounds(values: number[]): { lo: number; hi: number } {
+  if (values.length === 0) return { lo: 0, hi: 1 };
+
+  const sorted = [...values].sort((a, b) => a - b);
+  const loIdx = Math.floor(sorted.length * 0.05);
+  const hiIdx = Math.min(
+    sorted.length - 1,
+    Math.ceil(sorted.length * 0.95) - 1,
+  );
+  const lo = sorted[loIdx] ?? 0;
+  const hi = sorted[hiIdx] ?? 1;
+
+  if (hi - lo < 0.001) return { lo: 0, hi: 1 };
+  return { lo, hi };
+}
+
+function stretchBrightness(value: number, lo: number, hi: number): number {
+  return Math.min(1, Math.max(0, (value - lo) / (hi - lo)));
+}
+
 function charForBrightness(
   brightness: number,
   ramp: string,
   invert: boolean,
+  color: boolean,
 ): string {
   let value = brightness;
   if (invert) value = 1 - value;
-  return ramp[Math.floor(value * (ramp.length - 1))]!;
+  const char = ramp[Math.floor(value * (ramp.length - 1))]!;
+  if (color && /\s/.test(char)) return ".";
+  return char;
 }
 
 function appendColoredChar(
@@ -107,7 +139,20 @@ export function imageToAscii(
 
   ctx.drawImage(image, 0, 0, cols, rows);
   const { data } = ctx.getImageData(0, 0, cols, rows);
-  const ramp = RAMPS[style];
+  const ramp = color ? COLOR_RAMPS[style] : PLAIN_RAMPS[style];
+
+  let stretchLo = 0;
+  let stretchHi = 1;
+
+  if (color) {
+    const luminances: number[] = [];
+    for (let i = 0; i < data.length; i += 4) {
+      luminances.push(luminance(data[i]!, data[i + 1]!, data[i + 2]!));
+    }
+    const bounds = percentileStretchBounds(luminances);
+    stretchLo = bounds.lo;
+    stretchHi = bounds.hi;
+  }
 
   const plainLines: string[] = [];
   const htmlLines: string[] = [];
@@ -122,8 +167,13 @@ export function imageToAscii(
       const r = data[i]!;
       const g = data[i + 1]!;
       const b = data[i + 2]!;
-      const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-      const char = charForBrightness(brightness, ramp, invert);
+      let brightness = luminance(r, g, b);
+
+      if (color) {
+        brightness = stretchBrightness(brightness, stretchLo, stretchHi);
+      }
+
+      const char = charForBrightness(brightness, ramp, invert, color);
       plainLine += char;
 
       if (color) {
