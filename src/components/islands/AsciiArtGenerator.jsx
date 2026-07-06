@@ -146,8 +146,7 @@ export default function AsciiArtGenerator() {
         <p class="ascii-gen__eyebrow">[ DEV TOOL ]</p>
         <h1>ASCII Art Generator</h1>
         <p class="ascii-gen__subtitle">
-          Turn images into shareable ASCII art. Everything runs locally in your
-          browser.
+          당신의 WAIFU, ASCII로 변환되었다.
         </p>
       </header>
 
@@ -167,10 +166,9 @@ export default function AsciiArtGenerator() {
               if (file) void handleFile(file);
             }}
           />
-          <p class="ascii-gen__drop-title">Drop an image or click to browse</p>
+          <p class="ascii-gen__drop-title">당신의 WAIFU를 사진에서 텍스트로 변환해 드립니다.</p>
           <p class="ascii-gen__drop-hint">
-            PNG, JPG, SVG. Drop an image, choose a file, or paste an image URL.
-            Images never leave your browser.
+            WAIFU를 골라주세요.
           </p>
           <button
             type="button"
