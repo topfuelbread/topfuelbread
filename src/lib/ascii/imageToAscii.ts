@@ -5,6 +5,8 @@ import {
 
 const MAX_SOURCE_EDGE = 500;
 
+export type ColourOverlay = "none" | "colour" | "fullColour";
+
 export interface ImageToAsciiOptions {
   width: number;
   characterSet?: CharacterSetId;
@@ -12,7 +14,7 @@ export interface ImageToAsciiOptions {
   contrast?: number;
   brightnessMapping?: number;
   invert?: boolean;
-  color?: boolean;
+  colourOverlay?: ColourOverlay;
 }
 
 export interface ImageToAsciiResult {
@@ -152,6 +154,19 @@ function mosaicCharFromRamp(char: string): string {
   return /\s/.test(char) ? " " : "█";
 }
 
+function resolveCell(
+  mapped: number,
+  ramp: string,
+  useBlocksMosaic: boolean,
+): { plainChar: string; htmlChar: string; isBlank: boolean } {
+  const plainChar = charForMappedBrightness(mapped, ramp);
+  const isBlank = /\s/.test(plainChar);
+  const htmlChar = useBlocksMosaic
+    ? mosaicCharFromRamp(plainChar)
+    : colorCharFromRamp(plainChar);
+  return { plainChar, htmlChar, isBlank };
+}
+
 function appendColoredChar(
   parts: string[],
   state: { color: string; text: string },
@@ -229,6 +244,22 @@ function drawSourceImage(
   return ctx.getImageData(0, 0, width, height);
 }
 
+function appendHtmlChar(
+  coloredParts: string[],
+  spanState: { color: string; text: string },
+  r: number,
+  g: number,
+  b: number,
+  htmlChar: string,
+) {
+  if (htmlChar === " ") {
+    flushColored(coloredParts, spanState);
+    coloredParts.push(" ");
+  } else {
+    appendColoredChar(coloredParts, spanState, r, g, b, htmlChar);
+  }
+}
+
 export function imageToAscii(
   image: HTMLImageElement,
   {
@@ -238,14 +269,16 @@ export function imageToAscii(
     contrast = 0,
     brightnessMapping = 0.5,
     invert = false,
-    color = false,
+    colourOverlay = "none",
   }: ImageToAsciiOptions,
 ): ImageToAsciiResult {
   const cols = Math.max(10, Math.min(200, width));
   const aspect = image.height / image.width;
   const rows = Math.max(1, Math.round(cols * aspect * 0.5));
   const ramp = getCharacterRamp(characterSet);
-  const useBlocksMosaic = color && characterSet === "blocks";
+  const useColour = colourOverlay !== "none";
+  const useBlocksMosaic = useColour && characterSet === "blocks";
+  const useStretch = useColour;
 
   const source = drawSourceImage(image, MAX_SOURCE_EDGE);
   if (!source) return { plain: "", html: "" };
@@ -256,7 +289,7 @@ export function imageToAscii(
   let stretchLo = 0;
   let stretchHi = 1;
 
-  if (color) {
+  if (useStretch) {
     const luminances = cells.map(([r, g, b]) => luminance(r, g, b));
     const bounds = percentileStretchBounds(luminances);
     stretchLo = bounds.lo;
@@ -275,41 +308,70 @@ export function imageToAscii(
       const cellIndex = row * cols + col;
       const [r, g, b] = cells[cellIndex]!;
       const cellBrightness = luminance(r, g, b);
-      const mapped = mapBrightness(
-        cellBrightness,
-        brightnessMapping,
-        invert,
-        stretchLo,
-        stretchHi,
-        color,
-      );
-      const char = charForMappedBrightness(mapped, ramp);
-      plainLine += char;
 
-      if (color) {
-        const htmlChar = useBlocksMosaic
-          ? mosaicCharFromRamp(char)
-          : colorCharFromRamp(char);
+      let plainChar: string;
+      let htmlChar = "";
 
-        if (htmlChar === " ") {
-          flushColored(coloredParts, spanState);
-          coloredParts.push(" ");
+      if (colourOverlay === "fullColour") {
+        const mappedNormal = mapBrightness(
+          cellBrightness,
+          brightnessMapping,
+          false,
+          stretchLo,
+          stretchHi,
+          true,
+        );
+        const normal = resolveCell(mappedNormal, ramp, useBlocksMosaic);
+
+        if (normal.isBlank) {
+          const mappedInvert = mapBrightness(
+            cellBrightness,
+            brightnessMapping,
+            true,
+            stretchLo,
+            stretchHi,
+            true,
+          );
+          const filled = resolveCell(mappedInvert, ramp, useBlocksMosaic);
+          plainChar = filled.plainChar;
+          htmlChar = filled.htmlChar;
         } else {
-          appendColoredChar(coloredParts, spanState, r, g, b, htmlChar);
+          plainChar = normal.plainChar;
+          htmlChar = normal.htmlChar;
         }
+      } else {
+        const mapped = mapBrightness(
+          cellBrightness,
+          brightnessMapping,
+          invert,
+          stretchLo,
+          stretchHi,
+          useStretch,
+        );
+        plainChar = charForMappedBrightness(mapped, ramp);
+
+        if (colourOverlay === "colour") {
+          ({ htmlChar } = resolveCell(mapped, ramp, useBlocksMosaic));
+        }
+      }
+
+      plainLine += plainChar;
+
+      if (colourOverlay !== "none") {
+        appendHtmlChar(coloredParts, spanState, r, g, b, htmlChar);
       }
     }
 
     plainLines.push(plainLine);
 
-    if (color) {
+    if (useColour) {
       flushColored(coloredParts, spanState);
       htmlLines.push(coloredParts.join(""));
     }
   }
 
   const plain = plainLines.join("\n");
-  const html = color ? htmlLines.join("\n") : plainToCodeInner(plain);
+  const html = useColour ? htmlLines.join("\n") : plainToCodeInner(plain);
 
   return { plain, html };
 }

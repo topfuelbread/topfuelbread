@@ -10,6 +10,10 @@ import {
 } from "../../lib/ascii/imageToAscii";
 
 const WIDTHS = [40, 60, 80, 100, 120];
+const COLOUR_OVERLAYS = [
+  { id: "colour", label: "Colour" },
+  { id: "fullColour", label: "FullColour" },
+];
 const EMPTY_OUTPUT = { plain: "", html: "" };
 
 export default function AsciiArtGenerator() {
@@ -17,8 +21,8 @@ export default function AsciiArtGenerator() {
   const [text, setText] = useState("topfuelbread");
   const [font, setFont] = useState("Standard");
   const [width, setWidth] = useState(100);
-  const [color, setColor] = useState(true);
   const [invert, setInvert] = useState(false);
+  const [colourOverlay, setColourOverlay] = useState("none");
   const [characterSet, setCharacterSet] = useState("blocks");
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
@@ -36,9 +40,9 @@ export default function AsciiArtGenerator() {
 
   const codeInner = useMemo(() => {
     if (!output.plain) return "";
-    if (mode === "image" && color) return output.html;
+    if (mode === "image" && colourOverlay !== "none") return output.html;
     return plainToCodeInner(output.plain);
-  }, [mode, color, output.plain, output.html]);
+  }, [mode, colourOverlay, output.plain, output.html]);
 
   useEffect(() => {
     if (mode === "text") {
@@ -53,12 +57,12 @@ export default function AsciiArtGenerator() {
       normalizeAsciiOutput(
         imageToAscii(loadedImage, {
           width,
-          invert,
           characterSet,
           brightness,
           contrast,
           brightnessMapping,
-          color,
+          invert,
+          colourOverlay,
         }),
       ),
     );
@@ -66,12 +70,12 @@ export default function AsciiArtGenerator() {
     mode,
     loadedImage,
     width,
-    invert,
     characterSet,
     brightness,
     contrast,
     brightnessMapping,
-    color,
+    invert,
+    colourOverlay,
   ]);
 
   async function handleFile(file) {
@@ -124,8 +128,15 @@ export default function AsciiArtGenerator() {
     if (fileRef.current) fileRef.current.value = "";
   }
 
+  function toggleColourOverlay(nextOverlay) {
+    setColourOverlay((current) =>
+      current === nextOverlay ? "none" : nextOverlay,
+    );
+  }
+
   const hasOutput = Boolean(output.plain);
-  const showColoredPreview = mode === "image" && color && output.html;
+  const showColoredPreview =
+    mode === "image" && colourOverlay !== "none" && output.html;
 
   return (
     <div class="ascii-gen">
@@ -250,19 +261,28 @@ export default function AsciiArtGenerator() {
               <label class="ascii-gen__check">
                 <input
                   type="checkbox"
-                  checked={color}
-                  onChange={(event) => setColor(event.currentTarget.checked)}
-                />
-                <span>Color</span>
-              </label>
-              <label class="ascii-gen__check">
-                <input
-                  type="checkbox"
                   checked={invert}
                   onChange={(event) => setInvert(event.currentTarget.checked)}
                 />
                 <span>Invert</span>
               </label>
+              <div class="ascii-gen__render-modes">
+                <span class="ascii-gen__render-modes-label">Colour</span>
+                <div class="ascii-gen__render-modes-row">
+                  {COLOUR_OVERLAYS.map((entry) => (
+                    <button
+                      key={entry.id}
+                      type="button"
+                      class={`ascii-gen__btn${
+                        colourOverlay === entry.id ? " ascii-gen__btn--active" : ""
+                      }`}
+                      onClick={() => toggleColourOverlay(entry.id)}
+                    >
+                      {entry.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </>
           )}
 

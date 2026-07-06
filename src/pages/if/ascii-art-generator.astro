@@ -127,6 +127,36 @@ if (import.meta.env.PROD) {
     color: #ff00ff;
   }
 
+  :global(.ascii-gen__btn--active) {
+    background: rgba(0, 255, 255, 0.25);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.45);
+  }
+
+  :global(.ascii-gen__render-modes) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 160px;
+  }
+
+  :global(.ascii-gen__render-modes-label) {
+    color: #00ffff;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  :global(.ascii-gen__render-modes-row) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  :global(.ascii-gen__render-modes .ascii-gen__btn) {
+    font-size: 0.7rem;
+    padding: 0.45rem 0.65rem;
+  }
+
   :global(.ascii-gen__btn:disabled) {
     cursor: not-allowed;
     opacity: 0.45;
