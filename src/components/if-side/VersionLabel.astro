@@ -1,0 +1,48 @@
+---
+import { getGitBuildInfo } from "../../lib/git/buildInfo";
+
+const buildInfo = getGitBuildInfo();
+---
+
+{
+  buildInfo && (
+    <p class="if-version" aria-label="Site version">
+      <span class="if-version__number">{buildInfo.version}</span>
+      <span class="if-version__sep">·</span>
+      <span class="if-version__updated">last updated on</span>{" "}
+      <time datetime={buildInfo.committedAt}>
+        {`${buildInfo.date} ${buildInfo.time}`}
+      </time>
+    </p>
+  )
+}
+
+<style>
+  .if-version {
+    bottom: 1rem;
+    color: rgba(0, 255, 255, 0.55);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    margin: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 1rem;
+    text-shadow: 0 0 6px rgba(0, 255, 255, 0.25);
+    z-index: 3;
+  }
+
+  .if-version__number {
+    color: rgba(255, 123, 255, 0.85);
+    font-weight: 700;
+  }
+
+  .if-version__sep {
+    margin: 0 0.35rem;
+  }
+
+  .if-version__updated {
+    color: rgba(0, 255, 255, 0.45);
+    text-transform: lowercase;
+  }
+</style>
