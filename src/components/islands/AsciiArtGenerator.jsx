@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { CHARACTER_SET_OPTIONS } from "../../lib/ascii/characterSets";
-import { FIGLET_FONTS, renderFiglet } from "../../lib/ascii/figletFonts";
 import {
   imageToAscii,
   loadImageFromFile,
@@ -17,12 +16,9 @@ const COLOUR_OVERLAYS = [
 const EMPTY_OUTPUT = { plain: "", html: "" };
 
 export default function AsciiArtGenerator() {
-  const [mode, setMode] = useState("image");
-  const [text, setText] = useState("topfuelbread");
-  const [font, setFont] = useState("Standard");
   const [width, setWidth] = useState(100);
   const [invert, setInvert] = useState(false);
-  const [colourOverlay, setColourOverlay] = useState("none");
+  const [colourOverlay, setColourOverlay] = useState("fullColour");
   const [characterSet, setCharacterSet] = useState("blocks");
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
@@ -33,26 +29,14 @@ export default function AsciiArtGenerator() {
   const [loadedImage, setLoadedImage] = useState(null);
   const fileRef = useRef(null);
 
-  const textOutput = useMemo(
-    () => renderFiglet(text, font),
-    [text, font],
-  );
-
   const codeInner = useMemo(() => {
     if (!output.plain) return "";
-    if (mode === "image" && colourOverlay !== "none") return output.html;
+    if (colourOverlay !== "none") return output.html;
     return plainToCodeInner(output.plain);
-  }, [mode, colourOverlay, output.plain, output.html]);
+  }, [colourOverlay, output.plain, output.html]);
 
   useEffect(() => {
-    if (mode === "text") {
-      setOutput({ plain: textOutput, html: "" });
-      setError("");
-    }
-  }, [mode, textOutput]);
-
-  useEffect(() => {
-    if (mode !== "image" || !loadedImage) return;
+    if (!loadedImage) return;
     setOutput(
       normalizeAsciiOutput(
         imageToAscii(loadedImage, {
@@ -67,7 +51,6 @@ export default function AsciiArtGenerator() {
       ),
     );
   }, [
-    mode,
     loadedImage,
     width,
     characterSet,
@@ -121,7 +104,6 @@ export default function AsciiArtGenerator() {
   }
 
   function clearAll() {
-    setText("");
     setOutput(EMPTY_OUTPUT);
     setError("");
     setLoadedImage(null);
@@ -135,8 +117,7 @@ export default function AsciiArtGenerator() {
   }
 
   const hasOutput = Boolean(output.plain);
-  const showColoredPreview =
-    mode === "image" && colourOverlay !== "none" && output.html;
+  const showColoredPreview = colourOverlay !== "none" && output.html;
 
   return (
     <div class="ascii-gen">
@@ -144,183 +125,139 @@ export default function AsciiArtGenerator() {
         <p class="ascii-gen__eyebrow">[ DEV TOOL ]</p>
         <h1>ASCII Art Generator</h1>
         <p class="ascii-gen__subtitle">
-          Turn images and text into shareable ASCII art. Everything runs locally
-          in your browser.
+          Turn images into shareable ASCII art. Everything runs locally in your
+          browser.
         </p>
       </header>
 
       <div class="ascii-gen__panel">
+        <div
+          class="ascii-gen__drop"
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={onDrop}
+        >
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={(event) => {
+              const file = event.currentTarget.files?.[0];
+              if (file) void handleFile(file);
+            }}
+          />
+          <p class="ascii-gen__drop-title">Drop an image or click to browse</p>
+          <p class="ascii-gen__drop-hint">
+            PNG, JPG, SVG. Images never leave your browser.
+          </p>
+          <button
+            type="button"
+            class="ascii-gen__btn ascii-gen__btn--primary"
+            onClick={() => fileRef.current?.click()}
+          >
+            Choose image
+          </button>
+          {error && <p class="ascii-gen__error">{error}</p>}
+        </div>
+
         <div class="ascii-gen__toolbar">
           <label class="ascii-gen__field">
-            <span>Mode</span>
+            <span>Width</span>
             <select
-              value={mode}
-              onChange={(event) =>
-                setMode(event.currentTarget.value === "image" ? "image" : "text")
-              }
+              value={width}
+              onChange={(event) => setWidth(Number(event.currentTarget.value))}
             >
-              <option value="text">Text</option>
-              <option value="image">Image</option>
+              {WIDTHS.map((value) => (
+                <option key={value} value={value}>
+                  {value} cols
+                </option>
+              ))}
             </select>
           </label>
-
-          {mode === "text" ? (
-            <>
-              <label class="ascii-gen__field ascii-gen__field--grow">
-                <span>Text</span>
-                <input
-                  type="text"
-                  value={text}
-                  placeholder="Type text to render as a banner…"
-                  onInput={(event) => setText(event.currentTarget.value)}
-                />
-              </label>
-              <label class="ascii-gen__field">
-                <span>Font</span>
-                <select
-                  value={font}
-                  onChange={(event) => setFont(event.currentTarget.value)}
+          <label class="ascii-gen__field">
+            <span>Character Set</span>
+            <select
+              value={characterSet}
+              onChange={(event) => setCharacterSet(event.currentTarget.value)}
+            >
+              {CHARACTER_SET_OPTIONS.map((entry) => (
+                <option key={entry.id} value={entry.id}>
+                  {entry.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label class="ascii-gen__check">
+            <input
+              type="checkbox"
+              checked={invert}
+              onChange={(event) => setInvert(event.currentTarget.checked)}
+            />
+            <span>Invert</span>
+          </label>
+          <div class="ascii-gen__render-modes">
+            <span class="ascii-gen__render-modes-label">Colour</span>
+            <div class="ascii-gen__render-modes-row">
+              {COLOUR_OVERLAYS.map((entry) => (
+                <button
+                  key={entry.id}
+                  type="button"
+                  class={`ascii-gen__btn${
+                    colourOverlay === entry.id ? " ascii-gen__btn--active" : ""
+                  }`}
+                  onClick={() => toggleColourOverlay(entry.id)}
                 >
-                  {FIGLET_FONTS.map((entry) => (
-                    <option key={entry.id} value={entry.id}>
-                      {entry.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </>
-          ) : (
-            <>
-              <label class="ascii-gen__field">
-                <span>Width</span>
-                <select
-                  value={width}
-                  onChange={(event) =>
-                    setWidth(Number(event.currentTarget.value))
-                  }
-                >
-                  {WIDTHS.map((value) => (
-                    <option key={value} value={value}>
-                      {value} cols
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label class="ascii-gen__field">
-                <span>Character Set</span>
-                <select
-                  value={characterSet}
-                  onChange={(event) => setCharacterSet(event.currentTarget.value)}
-                >
-                  {CHARACTER_SET_OPTIONS.map((entry) => (
-                    <option key={entry.id} value={entry.id}>
-                      {entry.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label class="ascii-gen__field ascii-gen__field--slider">
-                <span>Brightness {brightness}</span>
-                <input
-                  type="range"
-                  min="-100"
-                  max="100"
-                  step="1"
-                  value={brightness}
-                  onInput={(event) =>
-                    setBrightness(Number(event.currentTarget.value))
-                  }
-                />
-              </label>
-              <label class="ascii-gen__field ascii-gen__field--slider">
-                <span>Contrast {contrast}</span>
-                <input
-                  type="range"
-                  min="-100"
-                  max="100"
-                  step="1"
-                  value={contrast}
-                  onInput={(event) =>
-                    setContrast(Number(event.currentTarget.value))
-                  }
-                />
-              </label>
-              <label class="ascii-gen__field ascii-gen__field--slider">
-                <span>Mapping {brightnessMapping.toFixed(2)}</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.05"
-                  value={brightnessMapping}
-                  onInput={(event) =>
-                    setBrightnessMapping(Number(event.currentTarget.value))
-                  }
-                />
-              </label>
-              <label class="ascii-gen__check">
-                <input
-                  type="checkbox"
-                  checked={invert}
-                  onChange={(event) => setInvert(event.currentTarget.checked)}
-                />
-                <span>Invert</span>
-              </label>
-              <div class="ascii-gen__render-modes">
-                <span class="ascii-gen__render-modes-label">Colour</span>
-                <div class="ascii-gen__render-modes-row">
-                  {COLOUR_OVERLAYS.map((entry) => (
-                    <button
-                      key={entry.id}
-                      type="button"
-                      class={`ascii-gen__btn${
-                        colourOverlay === entry.id ? " ascii-gen__btn--active" : ""
-                      }`}
-                      onClick={() => toggleColourOverlay(entry.id)}
-                    >
-                      {entry.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+                  {entry.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div class="ascii-gen__sliders">
+            <label class="ascii-gen__field ascii-gen__field--slider">
+              <span>Brightness {brightness}</span>
+              <input
+                type="range"
+                min="-100"
+                max="100"
+                step="1"
+                value={brightness}
+                onInput={(event) =>
+                  setBrightness(Number(event.currentTarget.value))
+                }
+              />
+            </label>
+            <label class="ascii-gen__field ascii-gen__field--slider">
+              <span>Contrast {contrast}</span>
+              <input
+                type="range"
+                min="-100"
+                max="100"
+                step="1"
+                value={contrast}
+                onInput={(event) =>
+                  setContrast(Number(event.currentTarget.value))
+                }
+              />
+            </label>
+            <label class="ascii-gen__field ascii-gen__field--slider">
+              <span>Mapping {brightnessMapping.toFixed(2)}</span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={brightnessMapping}
+                onInput={(event) =>
+                  setBrightnessMapping(Number(event.currentTarget.value))
+                }
+              />
+            </label>
+          </div>
 
           <button type="button" class="ascii-gen__btn" onClick={clearAll}>
             Clear
           </button>
         </div>
-
-        {mode === "image" && (
-          <div
-            class="ascii-gen__drop"
-            onDragOver={(event) => event.preventDefault()}
-            onDrop={onDrop}
-          >
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(event) => {
-                const file = event.currentTarget.files?.[0];
-                if (file) void handleFile(file);
-              }}
-            />
-            <p class="ascii-gen__drop-title">Drop an image or click to browse</p>
-            <p class="ascii-gen__drop-hint">
-              PNG, JPG, SVG. Images never leave your browser.
-            </p>
-            <button
-              type="button"
-              class="ascii-gen__btn ascii-gen__btn--primary"
-              onClick={() => fileRef.current?.click()}
-            >
-              Choose image
-            </button>
-            {error && <p class="ascii-gen__error">{error}</p>}
-          </div>
-        )}
 
         <div class="ascii-gen__result-wrap">
           <div class="ascii-gen__result-head">
@@ -358,8 +295,7 @@ export default function AsciiArtGenerator() {
             </div>
           ) : (
             <pre class="ascii-gen__result" aria-live="polite">
-              {output.plain ||
-                "ASCII output appears here. Type above or drop an image."}
+              {output.plain || "ASCII output appears here. Drop an image."}
             </pre>
           )}
         </div>
