@@ -1,19 +1,17 @@
-export type AsciiStyle = "shaded" | "edges";
+import {
+  type CharacterSetId,
+  getCharacterRamp,
+} from "./characterSets";
 
-const PLAIN_RAMPS: Record<AsciiStyle, string> = {
-  shaded: " $@#*+=-:.`. ",
-  edges: " .:-=+*#%@",
-};
-
-const COLOR_RAMPS: Record<AsciiStyle, string> = {
-  shaded: "`.:-=+*#@%&",
-  edges: "`.:-=+*#%@",
-};
+const MAX_SOURCE_EDGE = 500;
 
 export interface ImageToAsciiOptions {
   width: number;
+  characterSet?: CharacterSetId;
+  brightness?: number;
+  contrast?: number;
+  brightnessMapping?: number;
   invert?: boolean;
-  style?: AsciiStyle;
   color?: boolean;
 }
 
@@ -21,6 +19,8 @@ export interface ImageToAsciiResult {
   plain: string;
   html: string;
 }
+
+type RgbCell = [number, number, number];
 
 function luminance(r: number, g: number, b: number): number {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
@@ -46,17 +46,110 @@ function stretchBrightness(value: number, lo: number, hi: number): number {
   return Math.min(1, Math.max(0, (value - lo) / (hi - lo)));
 }
 
-function charForBrightness(
+function applyBrightnessContrast(
+  imageData: ImageData,
   brightness: number,
-  ramp: string,
+  contrast: number,
+): ImageData {
+  const data = new Uint8ClampedArray(imageData.data);
+  const brightnessOffset = brightness * 2.55;
+  const contrastFactor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+
+  for (let i = 0; i < data.length; i += 4) {
+    for (let channel = 0; channel < 3; channel++) {
+      let value = data[i + channel]!;
+      value = contrastFactor * (value - 128) + 128;
+      value += brightnessOffset;
+      data[i + channel] = Math.max(0, Math.min(255, Math.round(value)));
+    }
+  }
+
+  return new ImageData(data, imageData.width, imageData.height);
+}
+
+function averageRegion(
+  imageData: ImageData,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+): RgbCell {
+  const { width, height, data } = imageData;
+  const left = Math.max(0, Math.floor(x1));
+  const top = Math.max(0, Math.floor(y1));
+  const right = Math.min(width - 1, Math.ceil(x2));
+  const bottom = Math.min(height - 1, Math.ceil(y2));
+
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  let count = 0;
+
+  for (let y = top; y <= bottom; y++) {
+    for (let x = left; x <= right; x++) {
+      const i = (y * width + x) * 4;
+      r += data[i]!;
+      g += data[i + 1]!;
+      b += data[i + 2]!;
+      count++;
+    }
+  }
+
+  if (count === 0) return [0, 0, 0];
+  return [Math.round(r / count), Math.round(g / count), Math.round(b / count)];
+}
+
+function sampleGridCells(
+  imageData: ImageData,
+  cols: number,
+  rows: number,
+): RgbCell[] {
+  const cellWidth = imageData.width / cols;
+  const cellHeight = imageData.height / rows;
+  const cells: RgbCell[] = [];
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const x1 = col * cellWidth;
+      const y1 = row * cellHeight;
+      const x2 = (col + 1) * cellWidth;
+      const y2 = (row + 1) * cellHeight;
+      cells.push(averageRegion(imageData, x1, y1, x2, y2));
+    }
+  }
+
+  return cells;
+}
+
+function mapBrightness(
+  brightness: number,
+  brightnessMapping: number,
   invert: boolean,
-  color: boolean,
-): string {
-  let value = brightness;
-  if (invert) value = 1 - value;
-  const char = ramp[Math.floor(value * (ramp.length - 1))]!;
-  if (color && /\s/.test(char)) return ".";
-  return char;
+  stretchLo: number,
+  stretchHi: number,
+  useStretch: boolean,
+): number {
+  let mapped = useStretch
+    ? stretchBrightness(brightness, stretchLo, stretchHi)
+    : brightness;
+  const gamma = 1 / (0.25 + brightnessMapping * 1.5);
+  mapped = Math.pow(Math.min(1, Math.max(0, mapped)), gamma);
+  if (invert) mapped = 1 - mapped;
+  return mapped;
+}
+
+function charForMappedBrightness(mapped: number, ramp: string): string {
+  if (ramp.length === 0) return " ";
+  const index = Math.floor(mapped * (ramp.length - 1));
+  return ramp[index] ?? ramp[ramp.length - 1]!;
+}
+
+function colorCharFromRamp(char: string): string {
+  return /\s/.test(char) ? "." : char;
+}
+
+function mosaicCharFromRamp(char: string): string {
+  return /\s/.test(char) ? " " : "█";
 }
 
 function appendColoredChar(
@@ -117,38 +210,54 @@ export function normalizeAsciiOutput(value: unknown): ImageToAsciiResult {
   return { plain: "", html: "" };
 }
 
+function drawSourceImage(
+  image: HTMLImageElement,
+  maxEdge: number,
+): ImageData | null {
+  const scale = Math.min(1, maxEdge / Math.max(image.width, image.height));
+  const width = Math.max(1, Math.round(image.width * scale));
+  const height = Math.max(1, Math.round(image.height * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  ctx.drawImage(image, 0, 0, width, height);
+  return ctx.getImageData(0, 0, width, height);
+}
+
 export function imageToAscii(
   image: HTMLImageElement,
   {
     width,
+    characterSet = "basic",
+    brightness = 0,
+    contrast = 0,
+    brightnessMapping = 0.5,
     invert = false,
-    style = "shaded",
     color = false,
   }: ImageToAsciiOptions,
 ): ImageToAsciiResult {
   const cols = Math.max(10, Math.min(200, width));
   const aspect = image.height / image.width;
   const rows = Math.max(1, Math.round(cols * aspect * 0.5));
+  const ramp = getCharacterRamp(characterSet);
+  const useBlocksMosaic = color && characterSet === "blocks";
 
-  const canvas = document.createElement("canvas");
-  canvas.width = cols;
-  canvas.height = rows;
+  const source = drawSourceImage(image, MAX_SOURCE_EDGE);
+  if (!source) return { plain: "", html: "" };
 
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return { plain: "", html: "" };
-
-  ctx.drawImage(image, 0, 0, cols, rows);
-  const { data } = ctx.getImageData(0, 0, cols, rows);
-  const ramp = color ? COLOR_RAMPS[style] : PLAIN_RAMPS[style];
+  const adjusted = applyBrightnessContrast(source, brightness, contrast);
+  const cells = sampleGridCells(adjusted, cols, rows);
 
   let stretchLo = 0;
   let stretchHi = 1;
 
   if (color) {
-    const luminances: number[] = [];
-    for (let i = 0; i < data.length; i += 4) {
-      luminances.push(luminance(data[i]!, data[i + 1]!, data[i + 2]!));
-    }
+    const luminances = cells.map(([r, g, b]) => luminance(r, g, b));
     const bounds = percentileStretchBounds(luminances);
     stretchLo = bounds.lo;
     stretchHi = bounds.hi;
@@ -157,27 +266,37 @@ export function imageToAscii(
   const plainLines: string[] = [];
   const htmlLines: string[] = [];
 
-  for (let y = 0; y < rows; y++) {
+  for (let row = 0; row < rows; row++) {
     let plainLine = "";
     const coloredParts: string[] = [];
     const spanState = { color: "", text: "" };
 
-    for (let x = 0; x < cols; x++) {
-      const i = (y * cols + x) * 4;
-      const r = data[i]!;
-      const g = data[i + 1]!;
-      const b = data[i + 2]!;
-      let brightness = luminance(r, g, b);
-
-      if (color) {
-        brightness = stretchBrightness(brightness, stretchLo, stretchHi);
-      }
-
-      const char = charForBrightness(brightness, ramp, invert, color);
+    for (let col = 0; col < cols; col++) {
+      const cellIndex = row * cols + col;
+      const [r, g, b] = cells[cellIndex]!;
+      const cellBrightness = luminance(r, g, b);
+      const mapped = mapBrightness(
+        cellBrightness,
+        brightnessMapping,
+        invert,
+        stretchLo,
+        stretchHi,
+        color,
+      );
+      const char = charForMappedBrightness(mapped, ramp);
       plainLine += char;
 
       if (color) {
-        appendColoredChar(coloredParts, spanState, r, g, b, char);
+        const htmlChar = useBlocksMosaic
+          ? mosaicCharFromRamp(char)
+          : colorCharFromRamp(char);
+
+        if (htmlChar === " ") {
+          flushColored(coloredParts, spanState);
+          coloredParts.push(" ");
+        } else {
+          appendColoredChar(coloredParts, spanState, r, g, b, htmlChar);
+        }
       }
     }
 

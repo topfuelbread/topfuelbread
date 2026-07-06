@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { CHARACTER_SET_OPTIONS } from "../../lib/ascii/characterSets";
 import { FIGLET_FONTS, renderFiglet } from "../../lib/ascii/figletFonts";
 import {
   imageToAscii,
@@ -18,7 +19,10 @@ export default function AsciiArtGenerator() {
   const [width, setWidth] = useState(100);
   const [color, setColor] = useState(true);
   const [invert, setInvert] = useState(false);
-  const [style, setStyle] = useState("shaded");
+  const [characterSet, setCharacterSet] = useState("blocks");
+  const [brightness, setBrightness] = useState(0);
+  const [contrast, setContrast] = useState(0);
+  const [brightnessMapping, setBrightnessMapping] = useState(0.5);
   const [output, setOutput] = useState(EMPTY_OUTPUT);
   const [copied, setCopied] = useState("");
   const [error, setError] = useState("");
@@ -50,12 +54,25 @@ export default function AsciiArtGenerator() {
         imageToAscii(loadedImage, {
           width,
           invert,
-          style,
+          characterSet,
+          brightness,
+          contrast,
+          brightnessMapping,
           color,
         }),
       ),
     );
-  }, [mode, loadedImage, width, invert, style, color]);
+  }, [
+    mode,
+    loadedImage,
+    width,
+    invert,
+    characterSet,
+    brightness,
+    contrast,
+    brightnessMapping,
+    color,
+  ]);
 
   async function handleFile(file) {
     setError("");
@@ -179,18 +196,56 @@ export default function AsciiArtGenerator() {
                 </select>
               </label>
               <label class="ascii-gen__field">
-                <span>Style</span>
+                <span>Character Set</span>
                 <select
-                  value={style}
-                  onChange={(event) =>
-                    setStyle(
-                      event.currentTarget.value === "edges" ? "edges" : "shaded",
-                    )
-                  }
+                  value={characterSet}
+                  onChange={(event) => setCharacterSet(event.currentTarget.value)}
                 >
-                  <option value="shaded">Shaded</option>
-                  <option value="edges">Edges</option>
+                  {CHARACTER_SET_OPTIONS.map((entry) => (
+                    <option key={entry.id} value={entry.id}>
+                      {entry.name}
+                    </option>
+                  ))}
                 </select>
+              </label>
+              <label class="ascii-gen__field ascii-gen__field--slider">
+                <span>Brightness {brightness}</span>
+                <input
+                  type="range"
+                  min="-100"
+                  max="100"
+                  step="1"
+                  value={brightness}
+                  onInput={(event) =>
+                    setBrightness(Number(event.currentTarget.value))
+                  }
+                />
+              </label>
+              <label class="ascii-gen__field ascii-gen__field--slider">
+                <span>Contrast {contrast}</span>
+                <input
+                  type="range"
+                  min="-100"
+                  max="100"
+                  step="1"
+                  value={contrast}
+                  onInput={(event) =>
+                    setContrast(Number(event.currentTarget.value))
+                  }
+                />
+              </label>
+              <label class="ascii-gen__field ascii-gen__field--slider">
+                <span>Mapping {brightnessMapping.toFixed(2)}</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={brightnessMapping}
+                  onInput={(event) =>
+                    setBrightnessMapping(Number(event.currentTarget.value))
+                  }
+                />
               </label>
               <label class="ascii-gen__check">
                 <input

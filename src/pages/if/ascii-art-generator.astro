@@ -74,6 +74,17 @@ if (import.meta.env.PROD) {
     flex: 1 1 220px;
   }
 
+  :global(.ascii-gen__field--slider) {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+
+  :global(.ascii-gen__field--slider input[type="range"]) {
+    accent-color: #00ffff;
+    padding: 0;
+    width: 100%;
+  }
+
   :global(.ascii-gen__field span),
   :global(.ascii-gen__check span) {
     color: #00ffff;
@@ -191,6 +202,7 @@ if (import.meta.env.PROD) {
     background: transparent;
     display: inline-block;
     font: inherit;
+    line-height: 1;
     text-align: left;
     white-space: pre;
   }
