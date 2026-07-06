@@ -1,9 +1,15 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "topfuelbread",
-  "compatibility_date": "2026-07-01",
-  "assets": {
-    "directory": "./dist",
-    "not_found_handling": "404-page",
-  },
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "topfuelbread",
+	"compatibility_date": "2026-07-01",
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "404-page",
+	},
+	"kv_namespaces": [
+		{
+			"binding": "SESSION",
+			"id": "677a8c743cd643798c95052b6c33c772"
+		}
+	],
 }
