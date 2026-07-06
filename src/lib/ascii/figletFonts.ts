@@ -13,6 +13,8 @@ export const FIGLET_FONTS = [
   { id: "Ghost", label: "Shadow" },
 ] as const;
 
+export type FigletFontId = (typeof FIGLET_FONTS)[number]["id"];
+
 let ready = false;
 
 export function ensureFigletFonts() {
@@ -30,7 +32,7 @@ export function renderFiglet(text: string, font: string): string {
   const input = text.trim() || "ASCII";
   try {
     return figlet.textSync(input, {
-      font: font as figlet.Fonts,
+      font: font as FigletFontId,
       whitespaceBreak: true,
     });
   } catch {
