@@ -10,6 +10,7 @@ import {
 } from "../../lib/ascii/imageToAscii";
 
 const WIDTHS = [40, 60, 80, 100, 120];
+const FONT_SIZES = [6, 8, 10, 12, 14, 16];
 const COLOUR_OVERLAYS = [
   { id: "colour", label: "Colour" },
   { id: "fullColour", label: "FullColour" },
@@ -18,6 +19,7 @@ const EMPTY_OUTPUT = { plain: "", html: "" };
 
 export default function AsciiArtGenerator() {
   const [width, setWidth] = useState(100);
+  const [fontSize, setFontSize] = useState(10);
   const [invert, setInvert] = useState(false);
   const [colourOverlay, setColourOverlay] = useState("fullColour");
   const [characterSet, setCharacterSet] = useState("blocks");
@@ -216,6 +218,21 @@ export default function AsciiArtGenerator() {
             </select>
           </label>
           <label class="ascii-gen__field">
+            <span>Font size</span>
+            <select
+              value={fontSize}
+              onChange={(event) =>
+                setFontSize(Number(event.currentTarget.value))
+              }
+            >
+              {FONT_SIZES.map((value) => (
+                <option key={value} value={value}>
+                  {value}px
+                </option>
+              ))}
+            </select>
+          </label>
+          <label class="ascii-gen__field">
             <span>Character Set</span>
             <select
               value={characterSet}
@@ -331,11 +348,19 @@ export default function AsciiArtGenerator() {
             </div>
           </div>
           {showColoredPreview ? (
-            <div class="ascii-gen__result ascii-gen__result--html" aria-live="polite">
+            <div
+              class="ascii-gen__result ascii-gen__result--html"
+              style={{ fontSize: `${fontSize}px` }}
+              aria-live="polite"
+            >
               <code dangerouslySetInnerHTML={{ __html: output.html }} />
             </div>
           ) : (
-            <pre class="ascii-gen__result" aria-live="polite">
+            <pre
+              class="ascii-gen__result"
+              style={{ fontSize: `${fontSize}px` }}
+              aria-live="polite"
+            >
               {output.plain || "ASCII output appears here. Drop an image."}
             </pre>
           )}
